@@ -46,9 +46,9 @@ namespace AHSDataEntry
             cmbSeasonList1.SelectedIndex = -1;
 
             cmbSeasonList2.DataSource = seasonDt2;
-            cmbSeasonList2.BindingContext = new BindingContext();
             cmbSeasonList2.DisplayMember = "Name";
             cmbSeasonList2.ValueMember = "Id";
+            cmbSeasonList2.BindingContext = new BindingContext();
             cmbSeasonList2.SelectedIndex = -1;
 
         }
@@ -69,7 +69,8 @@ namespace AHSDataEntry
                 txtEpNum.Focus();
                 return;
             }
-            object ep2 = UIHelper.TextBoxCheck(txtEp2.Text, true, false);
+            object ep2 = UIHelper.TextBoxCheck(txtEp2.Text, true, true);
+
             if(!UIHelper.ComboBoxCheck(cmbSeasonList1.SelectedIndex, false))
             {
                 MessageBox.Show($"Please select a season From Season1 Dropdown");
@@ -89,7 +90,7 @@ namespace AHSDataEntry
                 UIHelper.UiCleaner(Controls);
                 txtcharName.Focus();
             }
-
+            object season2Id = cmbSeasonList2.SelectedValue;
             string q = AHSProvider.InsertQueryString(AHSProvider.chars, colsList);
             string connectionString = AHSProvider.ConnectionString();
             using (SqlConnection conn = new SqlConnection(connectionString))
@@ -97,13 +98,13 @@ namespace AHSDataEntry
                 conn.Open();
                 using (SqlCommand cmd = new SqlCommand(q, conn))
                 {
-                    cmd.Parameters.AddWithValue("@" + AHSProvider.charcolumns[1], charName);
-                    cmd.Parameters.AddWithValue("@" + AHSProvider.charcolumns[2], cmbCastList.SelectedValue);
-                    cmd.Parameters.AddWithValue("@" + AHSProvider.charcolumns[3], cmbSeasonList1.SelectedValue);
-                    cmd.Parameters.AddWithValue("@" + AHSProvider.charcolumns[4], cmbSeasonList2.SelectedValue ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@" + AHSProvider.charcolumns[1], charName);//name
+                    cmd.Parameters.AddWithValue("@" + AHSProvider.charcolumns[2], cmbCastList.SelectedValue);//castId 
+                    cmd.Parameters.AddWithValue("@" + AHSProvider.charcolumns[3], cmbSeasonList1.SelectedValue);//seasonId
+                    cmd.Parameters.AddWithValue("@Season2Id", season2Id ?? DBNull.Value);//season2Id
                     cmd.Parameters.AddWithValue("@" + AHSProvider.charcolumns[5], ep1);
 
-                    cmd.Parameters.AddWithValue("@" + AHSProvider.charcolumns[6], ep2);
+                    cmd.Parameters.AddWithValue("@" + AHSProvider.charcolumns[6], ep2 ?? DBNull.Value);
                     cmd.ExecuteNonQuery();
 
                 }
