@@ -26,11 +26,31 @@ A comprehensive .NET solution for managing health service data, featuring automa
 
 | Data Entry Interface | Query Results |
 
-| :---: | :---: |
+!\[App Preview](./screenshots\_AHSDatabase/screen\_shot\_1.png)
 
-| !\[Entry Screen](./images/entry\_screen.png) | !\[Query Screen](./images/query\_screen.png) |
+!\[App Preview](./screenshots\_AHSDatabase/screen\_shot\_2.png)
 
-\*Note: If images don't load, please check the \[images folder](./images).\*
+!\[App Preview](./screenshots\_AHSDatabase/screen\_shot\_3.png)
+
+!\[App Preview](./screenshots\_AHSDatabase/screen\_shot\_4.png)
+
+!\[App Preview](./screenshots\_AHSDatabase/screen\_shot\_5.png)
+
+
+
+\## 📝 Development Documentation
+
+you can see my day by day progression in my devlog:
+
+
+
+\[Read the Project Devlog](./AHS\_DB\_Devlog.md)
+
+
+
+
+
+\*\*Process Overview\*\*: The Data Entry app populates the \[SQL Server LocalDB](https://learn.microsoft.com), which is then accessed by the Query app for real-time data retrieval.
 
 
 
@@ -83,6 +103,8 @@ or alternatively
 username: editor
 
 password: admin
+
+
 
 
 
