@@ -1,5 +1,6 @@
 using AHSDb.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +9,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddDbContext<AHSDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("AHSDbConnection"));
+
 });
 
 var app = builder.Build();
@@ -22,8 +24,5 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-app.MapStaticAssets();
-app.MapRazorPages()
-   .WithStaticAssets();
 
 app.Run();

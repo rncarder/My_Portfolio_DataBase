@@ -14,7 +14,12 @@ namespace AHSQuery
             InitializeComponent();
             FetchData();
             SetDataRelations();
-            CmbTables.Items.AddRange(AHSProvider.seasons, AHSProvider.eps, AHSProvider.casts, AHSProvider.chars);
+            //CmbTables.Items.AddRange(AHSProvider.seasons, AHSProvider.eps, AHSProvider.casts, AHSProvider.chars);
+            //the add Range functional for some reason is not working so I have to add them one by one
+            CmbTables.Items.Add(AHSProvider.seasons);
+            CmbTables.Items.Add(AHSProvider.eps);
+            CmbTables.Items.Add(AHSProvider.casts);
+            CmbTables.Items.Add(AHSProvider.chars);
         }
 
 

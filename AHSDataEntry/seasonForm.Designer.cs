@@ -34,6 +34,7 @@
             label2 = new Label();
             txtSeasonNum = new TextBox();
             label3 = new Label();
+            commitBtn = new Button();
             SuspendLayout();
             // 
             // label1
@@ -54,7 +55,7 @@
             // 
             // addSeasonBtn
             // 
-            addSeasonBtn.Location = new Point(255, 121);
+            addSeasonBtn.Location = new Point(69, 151);
             addSeasonBtn.Name = "addSeasonBtn";
             addSeasonBtn.Size = new Size(94, 24);
             addSeasonBtn.TabIndex = 2;
@@ -88,11 +89,22 @@
             label3.TabIndex = 5;
             label3.Text = "Add Season";
             // 
+            // commitBtn
+            // 
+            commitBtn.Location = new Point(202, 151);
+            commitBtn.Name = "commitBtn";
+            commitBtn.Size = new Size(94, 29);
+            commitBtn.TabIndex = 6;
+            commitBtn.Text = "commit";
+            commitBtn.UseVisualStyleBackColor = true;
+            commitBtn.Click += commitBtn_Click;
+            // 
             // seasonForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(commitBtn);
             Controls.Add(label3);
             Controls.Add(txtSeasonNum);
             Controls.Add(label2);
@@ -113,5 +125,6 @@
         private Label label2;
         private TextBox txtSeasonNum;
         private Label label3;
+        private Button commitBtn;
     }
 }

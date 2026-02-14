@@ -19,6 +19,10 @@ namespace AHS.Core
         public static List<string> charcolumns = new List<string>() { "Id", "Name", "CastId", "Season1Id", "Season2Id", "NumOfEpisodes1", "NumOfEpisodes2" };
         public static List<string> castColumns = new List<string>() { "Id", "Name" };
 
+        public static List<_season> seasonbuffer = new List<_season>();
+
+        //internal static List<_season> SeasonsToBeAdded { get => seasonsToBeAdded; set => seasonsToBeAdded = value; }
+
         public static string ConnectionString()
         {
             return @"Data Source=(localdb)\MSSQLLocalDB;Database=AHSDatabase;Integrated Security=True;TrustServerCertificate=True";

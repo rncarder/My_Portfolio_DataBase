@@ -1,14 +1,21 @@
+using System.Collections.Generic;
+using AHSDb.Models;
+using Microsoft.EntityFrameworkCore;
+
 namespace AHSDataEntry
 {
     public partial class Form1 : Form
     {
         public int combBoxSel;
-        public List<Button> btns = new List<Button>();
+        public System.Collections.Generic.List<Button> btns = new List<Button>();
         public bool isLoggedIn;
         public Form1()
         {
             InitializeComponent();
-            btns.AddRange(SeasonBtn, epBtn, castBtn, CharBtn);
+            btns.Add(SeasonBtn);
+            btns.Add(epBtn);
+            btns.Add(castBtn);
+            btns.Add(CharBtn);
             checkLogin();
             charUpdateBtn.Visible = false;
         }
