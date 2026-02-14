@@ -42,3 +42,9 @@ I refactored the Query app removed alot of unneeded  ui controls within this app
 2/11/26
 In the AHSDataEntry app i added a method in the UIHelper class to make sure there is no duplicated data baing added to the database I a also changed the UIHelper.TextParsing method to UItextboxchecker and made it a little bit more recyclable in that it doesn't only check the textboxes that needs ints and now it checks the textboxes that needs strings. i added an method to make sure the comboboxes are not empty some are nullable so i use conditional statements to make sure it is not nullable.. product will be ready  for git push tomorrow.. 
 
+2/12/26
+made into github repository..took screenshots of app funcionting as i ecpected it to.
+
+12/13/26
+worked on version 2.0 . implementing unit of work to reduce latency and improve ux. Found enviromental conflicts during the update and fixed the conflicts. Am going to stick with the standard ADO.net (rawsql) to ensure connection stability.
+
