@@ -8,7 +8,6 @@ namespace AHSDb.Models
         public AHSDbContext(DbContextOptions<AHSDbContext> options) : base(options) { }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            // This is the "Safety Valve" for your DLL
             if (!optionsBuilder.IsConfigured)
             {
                 optionsBuilder.UseSqlServer(@"Data Source=(localdb)\MSSQLLocalDB;Database=AHSDatabase;Integrated Security=True;TrustServerCertificate=True",
