@@ -1,6 +1,6 @@
 ﻿namespace AHSDb.Models
 {
-    public class Character
+    public class Character : Model
     {
         public int Id {  get; set; }
 

@@ -5,6 +5,9 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AHSDb;
+using AHSDb.Models;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace AHS.Core
 {
@@ -19,7 +22,10 @@ namespace AHS.Core
         public static List<string> charcolumns = new List<string>() { "Id", "Name", "CastId", "Season1Id", "Season2Id", "NumOfEpisodes1", "NumOfEpisodes2" };
         public static List<string> castColumns = new List<string>() { "Id", "Name" };
 
-        public static List<_season> seasonbuffer = new List<_season>();
+        public static List<Season> seasonbuffer = new List<Season>();
+        public static List<Episode> episodeBuffer = new List<Episode>();
+        public static List<Cast> castBuffer = new List<Cast>();
+        public static List<Character> charBuffer = new List<Character>();
 
         //internal static List<_season> SeasonsToBeAdded { get => seasonsToBeAdded; set => seasonsToBeAdded = value; }
 
@@ -41,7 +47,52 @@ namespace AHS.Core
             string columnlist = string.Join(",", columns);
             return $"SELECT {columnlist} From {table}";
         }
+        public static bool addToBuffer(Model mod)
+        {
 
+ 
+            if (mod is Character)
+            {
+                if (charBuffer.Any(c => c.Name == ((Character)mod).Name))
+                {
+                    return false;
+                }
+
+                charBuffer.Add((Character)mod);
+                return true;
+            }
+            else if (mod is Cast)
+            {
+                if (castBuffer.Any(c => c.Name == ((Cast)mod).Name))
+                {
+                    return false;
+                }
+
+                castBuffer.Add((Cast)mod);
+                return true;
+            }
+            else if (mod is Episode)
+            {
+                if (episodeBuffer.Any(e => e.Name == ((Episode)mod).Name))
+                {
+                    //MessageBox.Show("Episode with the same name already exists in the buffer. Please change the episode name.");
+                    return false;
+                }
+                episodeBuffer.Add((Episode)mod);
+                return true;
+            }
+            else if (mod is Season)
+            {
+                if (seasonbuffer.Any(s => s.SeasonNum == ((Season)mod).SeasonNum || s.Name == ((Season)mod).Name))
+                {
+                    //MessageBox.Show("Season with the same name or season number already exists in the buffer. Please change the season number or name.");
+                    return false;
+                }
+                seasonbuffer.Add((Season)mod);
+                return true;
+            }
+            return false;
+        }
 
 
     }

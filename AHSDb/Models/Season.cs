@@ -2,7 +2,7 @@
 
 namespace AHSDb.Models
 {
-    public class Season
+    public class Season : Model
     {
         public int Id { get; set; }
         public int SeasonNum { get; set; }

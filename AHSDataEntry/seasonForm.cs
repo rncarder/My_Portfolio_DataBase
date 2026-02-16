@@ -39,25 +39,22 @@ namespace AHSDataEntry
                 return;
             }
 
-            if (AHSProvider.seasonbuffer.Any(s => s.seasonNum == (int)seasonNum || s.Name == seasonName.ToString()))
+            if(!AHSProvider.addToBuffer(new Season { SeasonNum = (int)seasonNum, Name = seasonName.ToString() }))
             {
                 MessageBox.Show($"{seasonName.ToString()} or Season Number {seasonNum.ToString()} is already added to the pending list");
                 UIHelper.UiCleaner(Controls);
                 txtSeasonNum.Focus();
                 return;
             }
-            AHSProvider.seasonbuffer.Add(new _season { seasonNum = (int)seasonNum, Name = seasonName.ToString() });
-
-            //MessageBox.Show($"season name: {season.Name} seasonnum: {season.seasonNum}");
             UIHelper.UiCleaner(Controls);
-            //AHSProvider.seasonbuffer.Add(season);
-           
+            txtSeasonNum.Focus();
+
 
         }
 
 
 
-        private void commitBtn_Click(object sender, EventArgs e)
+        private async void commitBtn_Click(object sender, EventArgs e)
         {
             
             //MessageBox.Show("is working");
@@ -72,7 +69,7 @@ namespace AHSDataEntry
                 {
                     //MessageBox.Show("context");
                     
-                    var nonexsisisting = AHSProvider.seasonbuffer.Where(s => !db.Seasons.Any(s2 => s2.SeasonNum == s.seasonNum || s2.Name == s.Name)).ToList();
+                    var nonexsisisting = AHSProvider.seasonbuffer.Where(s => !db.Seasons.Any(s2 => s2.SeasonNum == s.SeasonNum || s2.Name == s.Name)).ToList();
                     if (nonexsisisting.Count <= 0)
                     {
                         MessageBox.Show("All Seasons in the pending list already exist in the database");
@@ -82,22 +79,20 @@ namespace AHSDataEntry
                     
                     foreach (var season in nonexsisisting)
                     {
-                        db.Add(new AHSDb.Models.Season
-                        {
-                            SeasonNum = season.seasonNum,
-                            Name = season.Name
-                        });
+                        db.AddAsync( new Season { SeasonNum = season.SeasonNum, Name = season.Name });
                     }
-                    db.SaveChanges();
-                    AHSProvider.seasonbuffer.Clear();
-                    UIHelper.UiCleaner(Controls);
-                    MessageBox.Show("data entered into database");
-                    txtSeasonNum.Focus();
+                    await db.SaveChangesAsync();
                 }
             }
             catch (SqlException ex)
             {
                 MessageBox.Show($"An error occurred while connecting to the database: {ex.Message}");
+            }
+            finally
+            {
+                UIHelper.UiCleaner(Controls);
+                MessageBox.Show("seasons saved");
+                AHSProvider.seasonbuffer.Clear();
             }
             
         }

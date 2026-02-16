@@ -85,7 +85,7 @@ namespace AHSDataEntry
                 if (isInt) { return returnResult; }
                 else { return null; }
             }
-            if (isNullable && string.IsNullOrEmpty(s)) { return DBNull.Value; }
+            if (isNullable && string.IsNullOrEmpty(s)) { return null; }
             if(!string.IsNullOrWhiteSpace(s) && !isInt) { return s; }
             
             

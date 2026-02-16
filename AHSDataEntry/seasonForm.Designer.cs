@@ -55,11 +55,11 @@
             // 
             // addSeasonBtn
             // 
-            addSeasonBtn.Location = new Point(69, 151);
+            addSeasonBtn.Location = new Point(30, 151);
             addSeasonBtn.Name = "addSeasonBtn";
-            addSeasonBtn.Size = new Size(94, 24);
+            addSeasonBtn.Size = new Size(133, 29);
             addSeasonBtn.TabIndex = 2;
-            addSeasonBtn.Text = "enter";
+            addSeasonBtn.Text = "Add to Buffer";
             addSeasonBtn.UseVisualStyleBackColor = true;
             addSeasonBtn.Click += addSeason_Click;
             // 
@@ -77,7 +77,7 @@
             txtSeasonNum.Location = new Point(124, 85);
             txtSeasonNum.Name = "txtSeasonNum";
             txtSeasonNum.Size = new Size(125, 27);
-            txtSeasonNum.TabIndex = 4;
+            txtSeasonNum.TabIndex = 0;
             // 
             // label3
             // 
@@ -91,10 +91,10 @@
             // 
             // commitBtn
             // 
-            commitBtn.Location = new Point(202, 151);
+            commitBtn.Location = new Point(180, 151);
             commitBtn.Name = "commitBtn";
             commitBtn.Size = new Size(94, 29);
-            commitBtn.TabIndex = 6;
+            commitBtn.TabIndex = 4;
             commitBtn.Text = "commit";
             commitBtn.UseVisualStyleBackColor = true;
             commitBtn.Click += commitBtn_Click;

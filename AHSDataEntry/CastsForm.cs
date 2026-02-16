@@ -8,7 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using AHS.Core;
 using Microsoft.Data.SqlClient;
-
+using AHSDb.Models;
 namespace AHSDataEntry
 {
     public partial class CastsForm : Form
@@ -20,40 +20,61 @@ namespace AHSDataEntry
 
         private void addCastBtn_click(object sender, EventArgs e)
         {
-            String connectionstring = AHSProvider.ConnectionString();
-            List<string> colList = AHSProvider.castColumns.Where(c => c != "Id").ToList();
-            string q = AHSProvider.InsertQueryString(AHSProvider.casts, colList);
-            string SQuery = AHSProvider.SelectQueryString(AHSProvider.casts, colList);
-            if (UIHelper.AntiDoops(SQuery, colList))
-            {
-                UIHelper.UiCleaner(Controls);
-                txtCastName.Focus();
-                return;
-            }
             object txt = UIHelper.TextBoxCheck(txtCastName.Text.ToString(), false, false);
-            if(txt == null)
+            if (txt == null)
             {
                 MessageBox.Show("Please enter a Name into the text box");
                 UIHelper.UiCleaner(Controls);
                 txtCastName.Focus();
                 return;
             }
-            using (SqlConnection conn = new SqlConnection(connectionstring))
+            Cast cast = new Cast() { Name = txt.ToString() };
+            if (!AHSProvider.addToBuffer(cast))
             {
-                conn.Open();
-                using (SqlCommand cmd = new SqlCommand(q, conn))
-                {
-                    cmd.Parameters.AddWithValue("@" + AHSProvider.castColumns[1], txtCastName.Text);
-                    cmd.ExecuteNonQuery();
-                }
+                MessageBox.Show($"{cast.Name} is already in buffer");
+                UIHelper.UiCleaner(Controls);
+                txtCastName.Focus();
+                return;
             }
-            MessageBox.Show($"{txtCastName.Text} was added to the Casts table");
-
             UIHelper.UiCleaner(this.Controls);
             txtCastName.Focus();
 
 
         }
 
+        private async void commitCastBtn_Click(object sender, EventArgs e)
+        {
+            if (AHSProvider.castBuffer.Count <= 0)
+            {
+                MessageBox.Show("There are no casts to be added. Please add casts before committing.");
+                return;
+            }
+            try
+            {
+                using(AHSDbContext db = new AHSDbContext())
+                {
+                    List<Cast> bufferCheck = AHSProvider.castBuffer.Where(c => !db.Casts.Any(dbCast => dbCast.Name == c.Name)).ToList();
+                    foreach (Cast cast in bufferCheck)
+                    {
+                        await db.AddAsync(cast);
+                    }
+                    await db.SaveChangesAsync();
+                    MessageBox.Show("casts added successfully");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+                AHSProvider.castBuffer.Clear();
+                if (!this.IsDisposed)
+                {
+                    UIHelper.UiCleaner(Controls);
+                    txtCastName.Focus();
+                }
+            }
+        }
     }
 }

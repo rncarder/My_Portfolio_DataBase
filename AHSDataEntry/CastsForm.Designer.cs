@@ -31,15 +31,16 @@
             button1 = new Button();
             txtCastName = new TextBox();
             label1 = new Label();
+            commitCastBtn = new Button();
             SuspendLayout();
             // 
             // button1
             // 
-            button1.Location = new Point(221, 65);
+            button1.Location = new Point(22, 114);
             button1.Name = "button1";
             button1.Size = new Size(94, 29);
-            button1.TabIndex = 0;
-            button1.Text = "addCast";
+            button1.TabIndex = 1;
+            button1.Text = "Enter";
             button1.UseVisualStyleBackColor = true;
             button1.Click += addCastBtn_click;
             // 
@@ -48,7 +49,7 @@
             txtCastName.Location = new Point(77, 65);
             txtCastName.Name = "txtCastName";
             txtCastName.Size = new Size(125, 27);
-            txtCastName.TabIndex = 1;
+            txtCastName.TabIndex = 0;
             // 
             // label1
             // 
@@ -59,11 +60,22 @@
             label1.TabIndex = 2;
             label1.Text = "Name";
             // 
+            // commitCastBtn
+            // 
+            commitCastBtn.Location = new Point(148, 114);
+            commitCastBtn.Name = "commitCastBtn";
+            commitCastBtn.Size = new Size(94, 29);
+            commitCastBtn.TabIndex = 2;
+            commitCastBtn.Text = "commit";
+            commitCastBtn.UseVisualStyleBackColor = true;
+            commitCastBtn.Click += commitCastBtn_Click;
+            // 
             // CastsForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(commitCastBtn);
             Controls.Add(label1);
             Controls.Add(txtCastName);
             Controls.Add(button1);
@@ -78,5 +90,6 @@
         private Button button1;
         private TextBox txtCastName;
         private Label label1;
+        private Button commitCastBtn;
     }
 }
