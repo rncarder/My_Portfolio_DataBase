@@ -48,3 +48,11 @@ made into github repository..took screenshots of app funcionting as i ecpected i
 12/13/26
 worked on version 2.0 . implementing unit of work to reduce latency and improve ux. Found enviromental conflicts during the update and fixed the conflicts. Am going to stick with the standard ADO.net (rawsql) to ensure connection stability.
 
+2/14/26
+took time away to unplug from technology and reduce burnout.
+
+2/15/26
+implented the unit of work logic to all scripts. refactored my duplication checks. took a whole 10 line method out added a new method that checks the buffer and adds the new row to the buffer if the the row doesnt exsist. rebuilt the architecture to make the models accesible to all files to ensure making it easier to fetch and set rows
+
+2/16/26
+Enchanced the UX by adding a panel in the characters form to add cast and seasons if needed by the user. This will reduce the need to click out of forms to make the ux to make the process of adding a new character row to the database easierand more seemless. Please excuse the queryApp as it has been getting ignored quiet a bit lately. Plan on adding a search field to the queryApp and the cells clickable to display all information needed more accessible. 
