@@ -36,7 +36,7 @@ namespace AHSDb.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Casts");
+                    b.ToTable("Casts", (string)null);
                 });
 
             modelBuilder.Entity("AHSDb.Models.Character", b =>
@@ -74,7 +74,7 @@ namespace AHSDb.Migrations
 
                     b.HasIndex("Season2Id");
 
-                    b.ToTable("Characters");
+                    b.ToTable("Characters", (string)null);
                 });
 
             modelBuilder.Entity("AHSDb.Models.Episode", b =>
@@ -96,7 +96,7 @@ namespace AHSDb.Migrations
 
                     b.HasIndex("SeasonId");
 
-                    b.ToTable("Episodes");
+                    b.ToTable("Episodes", (string)null);
                 });
 
             modelBuilder.Entity("AHSDb.Models.Season", b =>
@@ -116,7 +116,7 @@ namespace AHSDb.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Seasons");
+                    b.ToTable("Seasons", (string)null);
                 });
 
             modelBuilder.Entity("AHSDb.Models.Character", b =>
