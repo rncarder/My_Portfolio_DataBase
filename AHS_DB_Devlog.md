@@ -56,3 +56,13 @@ implented the unit of work logic to all scripts. refactored my duplication check
 
 2/16/26
 Enchanced the UX by adding a panel in the characters form to add cast and seasons if needed by the user. This will reduce the need to click out of forms to make the ux to make the process of adding a new character row to the database easierand more seemless. Please excuse the queryApp as it has been getting ignored quiet a bit lately. Plan on adding a search field to the queryApp and the cells clickable to display all information needed more accessible. 
+
+2/17/26-2/18/26
+--The Reality check--
+spent most of the 17th staring at a screen trying to figure out what kinda of mess i made and how could i improve it figuring that it was going to be tedious and annoying to add a search function. It was working fine for what i needed it for which was a good reference point ot make sure the data was being entered in correctly. Had over 100 lines of code to move a few columns in one table or change the forgeign key IDs into readable names.
+--the pivot--
+So I decided since I was getting rid of the raw SQL inserts i could do the same for the query app. i switched to a Unit of work logic. this made it easier assgining names to a column rather than id and creating a more digestable view. i made a factory method (CreateDataSet(list, list, list, list)) creating a datatable from each list and putting those tables into a dataset elimainating the need to repeat in the search method as well. the search method then can simply filter all rows that contain the keyword(searchterm) in it and takes that list to the CreateDataSet. through all this i managed to get rid of 100's of lines of extremely ugly code also some if statements upon the combobox selection change.
+--victory--
+The view was so easy to manageand easier to digest after setting the tables to look how i wanted upon creation rather than creating a hundred lines of code to manage the DataGridView. I'll be honest navigating through the tricky datatypes was very time consuming so the search function was not nearly as easy to  create as i thought but i dug down and figured it out bunch of int to int32 conversions and not realizzing that the datatable wasnt seeing the models as types so had to pivot a little and initialize the values in those specific columns to make those work but all in all i am personally very sattified with what has been accomplished in turning the query app around.
+
+
