@@ -80,46 +80,25 @@ namespace AHSDataEntry
                 cmbCastList.Focus();
                 return;
             }
-            if (ep2 != null)
+            
+            if (!AHSProvider.addToBuffer(new Character
             {
-                if (!AHSProvider.addToBuffer(new Character
-                {
-                    Name = charName.ToString(),
-                    Cast = (Cast)cmbCastList.SelectedValue,
-                    Season1 = (Season)cmbSeasonList1.SelectedValue,
-                    Season2 = (Season)cmbSeasonList2.SelectedValue,
-                    NumOfEpisodes1 = (int)ep1,
-                    NumOfEpisodes2 = (int)ep2
+                Name = charName.ToString(),
+                Cast = (Cast)cmbCastList.SelectedValue,
+                Season1 = (Season)cmbSeasonList1.SelectedValue,
+                Season2 = (Season)cmbSeasonList2.SelectedValue,
+                NumOfEpisodes1 = (int)ep1,
+                NumOfEpisodes2 = (int)(ep2 ?? 0)
 
 
-                }))
-                {
-                    MessageBox.Show($"{charName.ToString()} is already in buffer)");
-                    txtcharName.Focus();
-                    UIHelper.UiCleaner(this.Controls);
-                    return;
-                }
-            }
-            else
+            }))
             {
-
-                if (!AHSProvider.addToBuffer(new Character
-                {
-                    Name = charName.ToString(),
-                    Cast = (Cast)cmbCastList.SelectedValue,
-                    Season1 = (Season)cmbSeasonList1.SelectedValue,
-                    Season2 = (Season)cmbSeasonList2.SelectedValue,
-                    NumOfEpisodes1 = (int)ep1
-
-
-                }))
-                {
-                    MessageBox.Show($"{charName.ToString()} is already in buffer)");
-                    txtcharName.Focus();
-                    UIHelper.UiCleaner(this.Controls);
-                    return;
-                }
+                MessageBox.Show($"{charName.ToString()} is already in buffer)");
+                txtcharName.Focus();
+                UIHelper.UiCleaner(this.Controls);
+                return;
             }
+
             UIHelper.UiCleaner(this.Controls);
             txtcharName.Focus();
         }

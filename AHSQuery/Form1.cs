@@ -91,9 +91,9 @@ namespace AHSQuery
             DataSet ds = new DataSet();
             DataTable seasonsDT = new DataTable();
             seasonsDT.TableName = AHSProvider.seasons;
-            string[] seasoncolumnsString = AHSProvider.SeasonColumnsList.ToArray();
-            DataColumn[] seasonColumns = Array.ConvertAll(seasoncolumnsString, str => new DataColumn(str));
-            seasonsDT.Columns.AddRange(seasonColumns);
+            seasonsDT.Columns.Add("Id", typeof(int));
+            seasonsDT.Columns.Add("SeasonNum", typeof(int));
+            seasonsDT.Columns.Add("Name", typeof(string));
             foreach (Season s in seasons)
             {
                 seasonsDT.Rows.Add(s.Id, s.SeasonNum, s.Name);
@@ -101,27 +101,30 @@ namespace AHSQuery
 
             DataTable epsDt = new DataTable();
             epsDt.TableName = AHSProvider.eps;
-            string[] epsColumnString = AHSProvider.episodesColums.ToArray();
-            DataColumn[] epsColumns = Array.ConvertAll(epsColumnString, str => new DataColumn(str));
-            epsDt.Columns.AddRange(epsColumns);
+            epsDt.Columns.Add("Id",  typeof(int));
+            epsDt.Columns.Add("Name", typeof(string));
+            epsDt.Columns.Add("Season", typeof(string));
             foreach (Episode ep in eps)
             {
                 epsDt.Rows.Add(ep.Id, ep.Name, ep.Season.Name);
             }
             DataTable castDt = new DataTable();
             castDt.TableName = AHSProvider.casts;
-            string[] castsColumnString = AHSProvider.castColumns.ToArray();
-            DataColumn[] castColumns = Array.ConvertAll(castsColumnString, str => new DataColumn(str));
-            castDt.Columns.AddRange(castColumns);
+            castDt.Columns.Add("Id", typeof(int));
+            castDt.Columns.Add("Name", typeof(string));
             foreach (Cast c in casts)
             {
                 castDt.Rows.Add(c.Id, c.Name);
             }
             DataTable charDt = new DataTable();
             charDt.TableName = AHSProvider.chars;
-            string[] charsColumnString = AHSProvider.charcolumns.ToArray();
-            DataColumn[] charsColumns = Array.ConvertAll(charsColumnString, str => new DataColumn(str));
-            charDt.Columns.AddRange(charsColumns);
+            charDt.Columns.Add("Id", typeof(int));
+            charDt.Columns.Add("Name", typeof(string));
+            charDt.Columns.Add("Cast", typeof(string));
+            charDt.Columns.Add("Season1", typeof(string));
+            charDt.Columns.Add("NumOfEps1", typeof(int));
+            charDt.Columns.Add("Season2", typeof(string));
+            charDt.Columns.Add("NumOfEps2", typeof(int));
             foreach (Character c in chars)
             {
                 charDt.Rows.Add(c.Id,
@@ -141,28 +144,28 @@ namespace AHSQuery
         //view of the season cast or character the are trying to view
         public DataSet searchDataSet(string searchstr)
         {
-            List<Season> fSeasons = dbds.Tables[0].AsEnumerable().Where(Row => Row.Field<string>(AHSProvider.SeasonColumnsList[2]).Contains(searchstr))
+            List<Season> fSeasons = dbds.Tables[0].AsEnumerable().Where(Row => Row.Field<string>("Name").Contains(searchstr))
             .Select(row => new Season
             {
-                Id = Convert.ToInt32(row[AHSProvider.SeasonColumnsList[0]]),
-                SeasonNum = Convert.ToInt32(row[AHSProvider.SeasonColumnsList[1]]),
-                Name = row.Field<string>(AHSProvider.SeasonColumnsList[2])
+                Id = row.Field<int>("Id"),
+                SeasonNum = row.Field<int>("SeasonNum"),
+                Name = row.Field<string>("Name")
             }).ToList();
             List<Episode> fEps = dbds.Tables[1].AsEnumerable().Where(Row => Row.Field<string>("Name").Contains(searchstr) || Row.Field<string>("Season").Contains(searchstr))
                 .Select(row => new Episode
                 {
-                    Id = Convert.ToInt32(row[AHSProvider.episodesColums[0]]),
-                    Name = row.Field<string>(AHSProvider.episodesColums[1]),
+                    Id = row.Field<int>("Id"),
+                    Name = row.Field<string>("Name"),
                     Season = new Season
                     {
-                        Name = row.Field<string>(AHSProvider.episodesColums[2])
+                        Name = row.Field<string>("Season")
                     }
                 }).ToList();
             List<Cast> fCasts = dbds.Tables[2].AsEnumerable().Where(Row => Row.Field<string>("Name").Contains(searchstr))
                 .Select(row => new Cast
                 {
-                    Id = Convert.ToInt32(row[AHSProvider.castColumns[0]]),
-                    Name = row.Field<string>(AHSProvider.castColumns[1])
+                    Id = row.Field<int>("Id"),
+                    Name = row.Field<string>("Name")
                 }).ToList();
             
             List<Character> fchars = dbds.Tables[3].AsEnumerable().Where(Row => 
@@ -172,24 +175,24 @@ namespace AHSQuery
              (Row.Field<string>("Season2")?.Contains(searchstr) ?? false))
                 .Select(row => new Character
                 {
-                    Id = Convert.ToInt32(row[AHSProvider.charcolumns[0]]),
-                    Name = row.Field<string>(AHSProvider.charcolumns[1]),
+                    Id = row.Field<int>("Id"),
+                    Name = row.Field<string>("Name"),
                     Cast = new Cast
                     {
-                        Name = row.Field<string>(AHSProvider.charcolumns[2])
+                        Name = row.Field<string>("Cast")
                     },
                     Season1 = new Season
                     {
-                        Name = row.Field<string>(AHSProvider.charcolumns[3])
+                        Name = row.Field<string>("Season1")
                     },
-                    NumOfEpisodes1 = Convert.ToInt32(row[AHSProvider.charcolumns[4]]),
-                    Season2 = row[AHSProvider.charcolumns[5]] == DBNull.Value ? null : 
+                    NumOfEpisodes1 = row.Field<int>("NumOfEps1"),
+                    Season2 = row["Season2"] == DBNull.Value ? null : 
                     new Season
                     {
-                        Name = row.Field<string>(AHSProvider.charcolumns[5])
+                        Name = row.Field<string>("Season2")
                     },
-                    NumOfEpisodes2 = row[AHSProvider.charcolumns[6]] == DBNull.Value
-                    ? 0 : Convert.ToInt32(row[AHSProvider.charcolumns[6]])
+                    NumOfEpisodes2 = row["NumOfEps2"] == DBNull.Value
+                    ? 0 : row.Field<int>("NumofEps2")
 
 
                 }).ToList();
