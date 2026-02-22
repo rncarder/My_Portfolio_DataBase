@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
@@ -16,16 +17,20 @@ namespace AHSDataEntry
         public seasonForm()
         {
             InitializeComponent();
-
+            if (AHSProvider.seasonbuffer.Count > 0)
+            {
+                bufferDash.DataSource = AHSProvider.seasonbuffer;
+                bufferDash.Columns["Id"].Visible = false;
+            }
+            
         }
         private void addSeason_Click(object sender, EventArgs e)
         {
-            
+
             object seasonNum = UIHelper.TextBoxCheck(txtSeasonNum.Text.ToString(), false, true);
             if (seasonNum == null)
             {
-                MessageBox.Show("Please Enter A Valid Number Into Seaon Number Box");
-                //UIHelper.UiCleaner(Controls);
+                lblSeasonNum.BackColor = Color.Red;
                 txtSeasonNum.Focus();
                 return;
             }
@@ -33,22 +38,23 @@ namespace AHSDataEntry
             //MessageBox.Show($"season name: {seasonName}");
             if (seasonName == null)
             {
-                MessageBox.Show("Please Enter a Valid Name into the Season Name Box");
-                //UIHelper.UiCleaner(Controls);
+                lblSeasonName.BackColor = Color.Red;
                 txtSeasonName.Focus();
                 return;
             }
 
-            if(!AHSProvider.addToBuffer(new Season { SeasonNum = (int)seasonNum, Name = seasonName.ToString() }))
+            if (!AHSProvider.addToBuffer(new Season { SeasonNum = (int)seasonNum, Name = seasonName.ToString() }))
             {
                 MessageBox.Show($"{seasonName.ToString()} or Season Number {seasonNum.ToString()} is already added to the pending list");
-                UIHelper.UiCleaner(Controls);
+                UIHelper.UiCleaner(Controls, DefaultBackColor);
                 txtSeasonNum.Focus();
                 return;
             }
-            UIHelper.UiCleaner(Controls);
+            UIHelper.UiCleaner(Controls, DefaultBackColor);
             txtSeasonNum.Focus();
-
+            bufferDash.DataSource = null;
+            bufferDash.DataSource = AHSProvider.seasonbuffer;
+            bufferDash.Columns["Id"].Visible = false;
 
         }
 
@@ -56,7 +62,7 @@ namespace AHSDataEntry
 
         private async void commitBtn_Click(object sender, EventArgs e)
         {
-            
+
             //MessageBox.Show("is working");
             if (AHSProvider.seasonbuffer.Count <= 0)
             {
@@ -68,7 +74,7 @@ namespace AHSDataEntry
                 using (AHSDbContext db = new AHSDbContext())
                 {
                     //MessageBox.Show("context");
-                    
+
                     var nonexsisisting = AHSProvider.seasonbuffer.Where(s => !db.Seasons.Any(s2 => s2.SeasonNum == s.SeasonNum || s2.Name == s.Name)).ToList();
                     if (nonexsisisting.Count <= 0)
                     {
@@ -76,10 +82,10 @@ namespace AHSDataEntry
                         AHSProvider.seasonbuffer.Clear();
                         return;
                     }
-                    
+
                     foreach (var season in nonexsisisting)
                     {
-                        db.AddAsync( new Season { SeasonNum = season.SeasonNum, Name = season.Name });
+                        await db.AddAsync(new Season { SeasonNum = season.SeasonNum, Name = season.Name });
                     }
                     await db.SaveChangesAsync();
                 }
@@ -90,11 +96,25 @@ namespace AHSDataEntry
             }
             finally
             {
-                UIHelper.UiCleaner(Controls);
+                UIHelper.UiCleaner(Controls, DefaultBackColor);
                 MessageBox.Show("seasons saved");
                 AHSProvider.seasonbuffer.Clear();
             }
-            
+
         }
+
+        private void bufferDash_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            int rowIndex = e.RowIndex;
+
+            txtSeasonNum.Text = AHSProvider.seasonbuffer[rowIndex].SeasonNum.ToString();
+            txtSeasonName.Text = AHSProvider.seasonbuffer[rowIndex].Name.ToString();
+            AHSProvider.seasonbuffer.RemoveAt(rowIndex);
+            bufferDash.DataSource = null;
+            bufferDash.DataSource = AHSProvider.seasonbuffer;
+            bufferDash.Columns["id"].Visible = false;
+            Debug.WriteLine($"rowindex; {e.RowIndex}");
+        }
+
     }
 }

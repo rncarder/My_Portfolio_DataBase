@@ -29,24 +29,24 @@
         private void InitializeComponent()
         {
             txtEpName = new TextBox();
-            label1 = new Label();
-            label2 = new Label();
+            lblEpName = new Label();
+            lblEpSeason = new Label();
             cmbSeasonList = new ComboBox();
             addEpBtn = new Button();
             label3 = new Label();
-            label4 = new Label();
-            cmbDeleteEpList = new ComboBox();
-            label5 = new Label();
-            epRemoveBtn = new Button();
             EpsCommitBtn = new Button();
             openSsnPnl = new Button();
             panel = new Panel();
-            label7 = new Label();
-            label6 = new Label();
+            lblEpPnlSeasonName = new Label();
+            lblEpPnlSeasonNum = new Label();
             txtSeasonName = new TextBox();
             txtSeasonNum = new TextBox();
             addSeasonBtn = new Button();
+            episodeDash = new DataGridView();
+            seasonDash = new DataGridView();
             panel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)episodeDash).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)seasonDash).BeginInit();
             SuspendLayout();
             // 
             // txtEpName
@@ -55,24 +55,25 @@
             txtEpName.Name = "txtEpName";
             txtEpName.Size = new Size(125, 27);
             txtEpName.TabIndex = 0;
+            txtEpName.KeyPress += UIHelper.Alpha_KeyPress;
             // 
-            // label1
+            // lblEpName
             // 
-            label1.AutoSize = true;
-            label1.Location = new Point(37, 82);
-            label1.Name = "label1";
-            label1.Size = new Size(49, 20);
-            label1.TabIndex = 1;
-            label1.Text = "Name";
+            lblEpName.AutoSize = true;
+            lblEpName.Location = new Point(37, 82);
+            lblEpName.Name = "lblEpName";
+            lblEpName.Size = new Size(49, 20);
+            lblEpName.TabIndex = 1;
+            lblEpName.Text = "Name";
             // 
-            // label2
+            // lblEpSeason
             // 
-            label2.AutoSize = true;
-            label2.Location = new Point(37, 118);
-            label2.Name = "label2";
-            label2.Size = new Size(56, 20);
-            label2.TabIndex = 2;
-            label2.Text = "Season";
+            lblEpSeason.AutoSize = true;
+            lblEpSeason.Location = new Point(37, 118);
+            lblEpSeason.Name = "lblEpSeason";
+            lblEpSeason.Size = new Size(56, 20);
+            lblEpSeason.TabIndex = 2;
+            lblEpSeason.Text = "Season";
             // 
             // cmbSeasonList
             // 
@@ -102,46 +103,6 @@
             label3.TabIndex = 5;
             label3.Text = "Add Episode";
             // 
-            // label4
-            // 
-            label4.AutoSize = true;
-            label4.Font = new Font("Segoe UI", 20F);
-            label4.Location = new Point(37, 220);
-            label4.Name = "label4";
-            label4.Size = new Size(244, 46);
-            label4.TabIndex = 6;
-            label4.Text = "Delete Episode";
-            label4.Visible = false;
-            // 
-            // cmbDeleteEpList
-            // 
-            cmbDeleteEpList.FormattingEnabled = true;
-            cmbDeleteEpList.Location = new Point(103, 269);
-            cmbDeleteEpList.Name = "cmbDeleteEpList";
-            cmbDeleteEpList.Size = new Size(151, 28);
-            cmbDeleteEpList.TabIndex = 7;
-            cmbDeleteEpList.Visible = false;
-            // 
-            // label5
-            // 
-            label5.AutoSize = true;
-            label5.Location = new Point(44, 278);
-            label5.Name = "label5";
-            label5.Size = new Size(49, 20);
-            label5.TabIndex = 8;
-            label5.Text = "Name";
-            label5.Visible = false;
-            // 
-            // epRemoveBtn
-            // 
-            epRemoveBtn.Location = new Point(269, 269);
-            epRemoveBtn.Name = "epRemoveBtn";
-            epRemoveBtn.Size = new Size(94, 29);
-            epRemoveBtn.TabIndex = 9;
-            epRemoveBtn.Text = "Delete";
-            epRemoveBtn.UseVisualStyleBackColor = true;
-            epRemoveBtn.Visible = false;
-            // 
             // EpsCommitBtn
             // 
             EpsCommitBtn.Location = new Point(203, 143);
@@ -167,8 +128,8 @@
             // 
             // panel
             // 
-            panel.Controls.Add(label7);
-            panel.Controls.Add(label6);
+            panel.Controls.Add(lblEpPnlSeasonName);
+            panel.Controls.Add(lblEpPnlSeasonNum);
             panel.Controls.Add(txtSeasonName);
             panel.Controls.Add(txtSeasonNum);
             panel.Controls.Add(addSeasonBtn);
@@ -178,23 +139,23 @@
             panel.TabIndex = 12;
             panel.Visible = false;
             // 
-            // label7
+            // lblEpPnlSeasonName
             // 
-            label7.AutoSize = true;
-            label7.Location = new Point(19, 54);
-            label7.Name = "label7";
-            label7.Size = new Size(100, 20);
-            label7.TabIndex = 4;
-            label7.Text = "Season Name";
+            lblEpPnlSeasonName.AutoSize = true;
+            lblEpPnlSeasonName.Location = new Point(19, 54);
+            lblEpPnlSeasonName.Name = "lblEpPnlSeasonName";
+            lblEpPnlSeasonName.Size = new Size(100, 20);
+            lblEpPnlSeasonName.TabIndex = 4;
+            lblEpPnlSeasonName.Text = "Season Name";
             // 
-            // label6
+            // lblEpPnlSeasonNum
             // 
-            label6.AutoSize = true;
-            label6.Location = new Point(3, 28);
-            label6.Name = "label6";
-            label6.Size = new Size(114, 20);
-            label6.TabIndex = 3;
-            label6.Text = "Season Number";
+            lblEpPnlSeasonNum.AutoSize = true;
+            lblEpPnlSeasonNum.Location = new Point(3, 28);
+            lblEpPnlSeasonNum.Name = "lblEpPnlSeasonNum";
+            lblEpPnlSeasonNum.Size = new Size(114, 20);
+            lblEpPnlSeasonNum.TabIndex = 3;
+            lblEpPnlSeasonNum.Text = "Season Number";
             // 
             // txtSeasonName
             // 
@@ -202,6 +163,7 @@
             txtSeasonName.Name = "txtSeasonName";
             txtSeasonName.Size = new Size(125, 27);
             txtSeasonName.TabIndex = 6;
+            txtSeasonName.KeyPress += UIHelper.Alpha_KeyPress;
             // 
             // txtSeasonNum
             // 
@@ -209,6 +171,7 @@
             txtSeasonNum.Name = "txtSeasonNum";
             txtSeasonNum.Size = new Size(125, 27);
             txtSeasonNum.TabIndex = 5;
+            txtSeasonNum.KeyPress += UIHelper.Digit_KeyPress;
             // 
             // addSeasonBtn
             // 
@@ -220,28 +183,46 @@
             addSeasonBtn.UseVisualStyleBackColor = true;
             addSeasonBtn.Click += addSeasonBtn_Click;
             // 
+            // episodeDash
+            // 
+            episodeDash.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            episodeDash.Location = new Point(12, 312);
+            episodeDash.Name = "episodeDash";
+            episodeDash.RowHeadersWidth = 51;
+            episodeDash.Size = new Size(300, 126);
+            episodeDash.TabIndex = 13;
+            // 
+            // seasonDash
+            // 
+            seasonDash.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            seasonDash.Location = new Point(370, 312);
+            seasonDash.Name = "seasonDash";
+            seasonDash.RowHeadersWidth = 51;
+            seasonDash.Size = new Size(300, 126);
+            seasonDash.TabIndex = 14;
+            // 
             // EpisodeForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(seasonDash);
+            Controls.Add(episodeDash);
             Controls.Add(panel);
             Controls.Add(openSsnPnl);
             Controls.Add(EpsCommitBtn);
-            Controls.Add(epRemoveBtn);
-            Controls.Add(label5);
-            Controls.Add(cmbDeleteEpList);
-            Controls.Add(label4);
             Controls.Add(label3);
             Controls.Add(addEpBtn);
             Controls.Add(cmbSeasonList);
-            Controls.Add(label2);
-            Controls.Add(label1);
+            Controls.Add(lblEpSeason);
+            Controls.Add(lblEpName);
             Controls.Add(txtEpName);
             Name = "EpisodeForm";
             Text = "EpisodeForm";
             panel.ResumeLayout(false);
             panel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)episodeDash).EndInit();
+            ((System.ComponentModel.ISupportInitialize)seasonDash).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -249,22 +230,20 @@
         #endregion
 
         private TextBox txtEpName;
-        private Label label1;
-        private Label label2;
+        private Label lblEpName;
+        private Label lblEpSeason;
         private ComboBox cmbSeasonList;
         private Button addEpBtn;
         private Label label3;
-        private Label label4;
-        private ComboBox cmbDeleteEpList;
-        private Label label5;
-        private Button epRemoveBtn;
         private Button EpsCommitBtn;
         private Button openSsnPnl;
         private Panel panel;
         private Button addSeasonBtn;
-        private Label label7;
-        private Label label6;
+        private Label lblEpPnlSeasonName;
+        private Label lblEpPnlSeasonNum;
         private TextBox txtSeasonName;
         private TextBox txtSeasonNum;
+        private DataGridView episodeDash;
+        private DataGridView seasonDash;
     }
 }

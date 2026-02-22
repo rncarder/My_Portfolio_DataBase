@@ -28,23 +28,25 @@
         /// </summary>
         private void InitializeComponent()
         {
-            label1 = new Label();
+            lblSeasonName = new Label();
             txtSeasonName = new TextBox();
             addSeasonBtn = new Button();
-            label2 = new Label();
+            lblSeasonNum = new Label();
             txtSeasonNum = new TextBox();
             label3 = new Label();
             commitBtn = new Button();
+            bufferDash = new DataGridView();
+            ((System.ComponentModel.ISupportInitialize)bufferDash).BeginInit();
             SuspendLayout();
             // 
-            // label1
+            // lblSeasonName
             // 
-            label1.AutoSize = true;
-            label1.Location = new Point(69, 118);
-            label1.Name = "label1";
-            label1.Size = new Size(49, 20);
-            label1.TabIndex = 0;
-            label1.Text = "Name";
+            lblSeasonName.AutoSize = true;
+            lblSeasonName.Location = new Point(69, 118);
+            lblSeasonName.Name = "lblSeasonName";
+            lblSeasonName.Size = new Size(49, 20);
+            lblSeasonName.TabIndex = 0;
+            lblSeasonName.Text = "Name";
             // 
             // txtSeasonName
             // 
@@ -52,6 +54,7 @@
             txtSeasonName.Name = "txtSeasonName";
             txtSeasonName.Size = new Size(125, 27);
             txtSeasonName.TabIndex = 1;
+            txtSeasonName.KeyPress += UIHelper.Alpha_KeyPress;
             // 
             // addSeasonBtn
             // 
@@ -63,14 +66,14 @@
             addSeasonBtn.UseVisualStyleBackColor = true;
             addSeasonBtn.Click += addSeason_Click;
             // 
-            // label2
+            // lblSeasonNum
             // 
-            label2.AutoSize = true;
-            label2.Location = new Point(30, 88);
-            label2.Name = "label2";
-            label2.Size = new Size(88, 20);
-            label2.TabIndex = 3;
-            label2.Text = "SeasonNum";
+            lblSeasonNum.AutoSize = true;
+            lblSeasonNum.Location = new Point(30, 88);
+            lblSeasonNum.Name = "lblSeasonNum";
+            lblSeasonNum.Size = new Size(88, 20);
+            lblSeasonNum.TabIndex = 3;
+            lblSeasonNum.Text = "SeasonNum";
             // 
             // txtSeasonNum
             // 
@@ -78,6 +81,7 @@
             txtSeasonNum.Name = "txtSeasonNum";
             txtSeasonNum.Size = new Size(125, 27);
             txtSeasonNum.TabIndex = 0;
+            txtSeasonNum.KeyPress += UIHelper.Digit_KeyPress;
             // 
             // label3
             // 
@@ -99,32 +103,45 @@
             commitBtn.UseVisualStyleBackColor = true;
             commitBtn.Click += commitBtn_Click;
             // 
+            // bufferDash
+            // 
+            bufferDash.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            bufferDash.Location = new Point(2, 310);
+            bufferDash.Name = "bufferDash";
+            bufferDash.RowHeadersWidth = 51;
+            bufferDash.Size = new Size(791, 142);
+            bufferDash.TabIndex = 6;
+            bufferDash.CellClick += bufferDash_CellClick;
+            // 
             // seasonForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(bufferDash);
             Controls.Add(commitBtn);
             Controls.Add(label3);
             Controls.Add(txtSeasonNum);
-            Controls.Add(label2);
+            Controls.Add(lblSeasonNum);
             Controls.Add(addSeasonBtn);
             Controls.Add(txtSeasonName);
-            Controls.Add(label1);
+            Controls.Add(lblSeasonName);
             Name = "seasonForm";
             Text = "seasonForm";
+            ((System.ComponentModel.ISupportInitialize)bufferDash).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
 
-        private Label label1;
+        private Label lblSeasonName;
         private TextBox txtSeasonName;
         private Button addSeasonBtn;
-        private Label label2;
+        private Label lblSeasonNum;
         private TextBox txtSeasonNum;
         private Label label3;
         private Button commitBtn;
+        private DataGridView bufferDash;
     }
 }

@@ -1,15 +1,17 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using AHS.Core;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
+using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Text;
-using AHS.Core;
+using System.Data.SqlTypes;
 using System.Reflection.Metadata.Ecma335;
+using System.Text;
 namespace AHSDataEntry
 {
     internal class UIHelper
     {
-        public static void UiCleaner(Control.ControlCollection controls)
+        public static void UiCleaner(Control.ControlCollection controls, Color lblColor)
         {
             foreach (Control c in controls)
             {
@@ -21,8 +23,11 @@ namespace AHSDataEntry
                 {
                     cb.SelectedIndex = -1;
                 }
-
-                if (c.HasChildren) { UiCleaner(c.Controls); }
+                if(c is Label lbl)
+                {
+                    lbl.BackColor = lblColor;
+                }
+                if (c.HasChildren) { UiCleaner(c.Controls, lblColor); }
             }
         }
         public static object TextBoxCheck(string s, bool isNullable, bool isInt)
@@ -40,6 +45,7 @@ namespace AHSDataEntry
             return null;
 
         }
+
         public static bool ComboBoxCheck(int cmbIndex, bool isNullable)
         {
             
@@ -47,7 +53,30 @@ namespace AHSDataEntry
             if(cmbIndex < 0) { return false; }
             return true;
         }
-       
+        public static void SetComboBox(ComboBox cb, IEnumerable<AHSDb.Model> modList)
+        {
+            cb.DataSource = null;
+            cb.DataSource = modList;
+            cb.DisplayMember = "Name";
+            cb.SelectedIndex = -1;
+            cb.BindingContext = new BindingContext();
+        }
+        public static void Digit_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!(Char.IsDigit(e.KeyChar) || (e.KeyChar == (char)Keys.Back)))
+            {
+                e.Handled = true;
+            }
+        }
+
+        public static void Alpha_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (Char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true;
+            }
+        }
+
     }
 }
 

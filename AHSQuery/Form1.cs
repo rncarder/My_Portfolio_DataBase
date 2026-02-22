@@ -8,62 +8,46 @@ using AHSDb;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.Reflection;
 
 namespace AHSQuery
 {
     public partial class Form1 : Form
     {
-        public DataSet dbds = new DataSet();
+        public List<Season> seasons = new List<Season>();
+        public List<Episode> eps = new List<Episode>();
+        public List<Character> chars = new List<Character>();
+        public List<Cast> casts = new List<Cast>();
+        public Dictionary<string, DataTable> masterDict = new Dictionary<string, DataTable>();
         public Form1()
         {
             InitializeComponent();
-            
-            FetchData();
 
-            //CmbTables.Items.AddRange(AHSProvider.seasons, AHSProvider.eps, AHSProvider.casts, AHSProvider.chars);
-            //the add Range function for some reason is not working so I have to add them one by one
-            CmbTables.Items.Add(AHSProvider.seasons);
-            CmbTables.Items.Add(AHSProvider.eps);
-            CmbTables.Items.Add(AHSProvider.casts);
-            CmbTables.Items.Add(AHSProvider.chars);
+            FetchData();
+            CmbTables.Items.AddRange(masterDict.Keys.ToArray());
+
+
         }
         private void Cmb_Select_Commit(object sender, EventArgs e)
         {
-            //MessageBox.Show("cmbChang");
-            int index = CmbTables.SelectedIndex;
-            if (index >= 0)
+            string selected = CmbTables.SelectedItem.ToString();
+            if (string.IsNullOrEmpty(searchBox.Text))
             {
-                //if there is a search term  
-                //this updates the griddataview to display filtered results
-                if (!string.IsNullOrEmpty(searchBox.Text))
-                {
-                    //string search = searchBox.Text.ToString();
-                    
-                    string search = AHSProvider.ToUpperCase(searchBox.Text);
-                    dgv.DataSource = searchDataSet(search).Tables[index];
-                }
-                //if no search term it shows all the data in each table
-                else { dgv.DataSource = dbds.Tables[index]; }
-                dgv.Columns[0].Visible = false;
-
+                dgv.DataSource = masterDict[selected];
             }
+            else { dgv.DataSource = searchDict(searchBox.Text.ToString())[selected]; }
+            dgv.Columns["Id"].Visible = false;
         }
-        //if new data has been entered into the database user can click the "refresh Button"
-        //to update the data accessed by this app
         private void refreshBtn_Click(object sender, EventArgs e)
         {
-            this.Invalidate();
+            //this.Invalidate();
             this.Update();
-            dbds.Clear();
+            masterDict.Clear();
             FetchData();
         }
-        //fetches data onload or onRefresh
         public void FetchData()
         {
-            List<Season> seasons = new List<Season>();
-            List<Episode> eps = new List<Episode>();
-            List<Character> chars = new List<Character>();
-            List<Cast> casts = new List<Cast>();
+            //since this is a small database i figure best to load all data at once to reduce trips to server
             try
             {
                 using (AHSDbContext db = new AHSDbContext())
@@ -73,130 +57,104 @@ namespace AHSQuery
                     casts = db.Casts.ToList();
                     chars = db.Characters.ToList();
                 }
-
+                Assembly ex = Assembly.GetExecutingAssembly();
+                masterDict.Add("Seasons", createDT(seasons));
+                masterDict.Add("Episodes", createDT(eps));
+                masterDict.Add("Casts", createDT(casts));
+                masterDict.Add("Characters", createDT(chars));
+                Type[] types = ex.GetTypes();
+                foreach (Type type in types)
+                {
+                    Console.WriteLine("Class {0}", type.Name);
+                }
             }
             catch (Exception ex) { MessageBox.Show(ex.Message); }
             finally
             {
-                dbds = CreateDs(seasons, eps, casts, chars);
             }
         }
-        //creates a DataSet the DataGridView usees as data source
-        //this method is used to create the intial DataSet that is later used to filter
-        //search results for each Table. this way the server is only connected on load and refresh
-        public DataSet CreateDs(List<Season> seasons, List<Episode> eps, List<Cast> casts, List<Character> chars)
+        public DataTable createDT(IEnumerable<AHSDb.Model> modList)
         {
-            //each block of code is creating a table out of the list in the parameters of the method
-            //this ensures the view of the data stays consistant 
-            DataSet ds = new DataSet();
-            DataTable seasonsDT = new DataTable();
-            seasonsDT.TableName = AHSProvider.seasons;
-            seasonsDT.Columns.Add("Id", typeof(int));
-            seasonsDT.Columns.Add("SeasonNum", typeof(int));
-            seasonsDT.Columns.Add("Name", typeof(string));
-            foreach (Season s in seasons)
+            List<AHSDb.Model> mods = modList.ToList();
+
+            if (modList is List<Season>)
             {
-                seasonsDT.Rows.Add(s.Id, s.SeasonNum, s.Name);
+                DataTable seasonsDT = new DataTable();
+                seasonsDT.Columns.Add("Id", typeof(int));
+                seasonsDT.Columns.Add("SeasonNum", typeof(int));
+                seasonsDT.Columns.Add("Name", typeof(string));
+                foreach (Season s in modList)
+                {
+                    seasonsDT.Rows.Add(s.Id, s.SeasonNum, s.Name);
+                }
+                return seasonsDT;
+            }
+            else if (modList is List<Episode>)
+            {
+                DataTable epsDt = new DataTable();
+                epsDt.TableName = AHSProvider.eps;
+                epsDt.Columns.Add("Id", typeof(int));
+                epsDt.Columns.Add("Name", typeof(string));
+                epsDt.Columns.Add("Season", typeof(string));
+                foreach (Episode ep in modList)
+                {
+                    epsDt.Rows.Add(ep.Id, ep.Name, ep.Season.Name);
+                }
+                return epsDt;
+            }
+            else if (modList is List<Cast>)
+            {
+                DataTable castDt = new DataTable();
+                castDt.TableName = AHSProvider.casts;
+                castDt.Columns.Add("Id", typeof(int));
+                castDt.Columns.Add("Name", typeof(string));
+                foreach (Cast c in modList)
+                {
+                    castDt.Rows.Add(c.Id, c.Name);
+                }
+                return castDt;
+            }
+            else
+            {
+                DataTable charDt = new DataTable();
+                charDt.Columns.Add("Id", typeof(int));
+                charDt.Columns.Add("Name", typeof(string));
+                charDt.Columns.Add("Cast", typeof(string));
+                charDt.Columns.Add("Season1", typeof(string));
+                charDt.Columns.Add("NumOfEps1", typeof(int));
+                charDt.Columns.Add("Season2", typeof(string));
+                charDt.Columns.Add("NumOfEps2", typeof(int));
+                foreach (Character c in modList)
+                {
+                    charDt.Rows.Add(c.Id,
+                        c.Name,
+                        c.Cast.Name,
+                        c.Season1.Name,
+                        c.NumOfEpisodes1,
+                        c.Season2?.Name,
+                        c.NumOfEpisodes2);
+                }
+                return charDt;
             }
 
-            DataTable epsDt = new DataTable();
-            epsDt.TableName = AHSProvider.eps;
-            epsDt.Columns.Add("Id",  typeof(int));
-            epsDt.Columns.Add("Name", typeof(string));
-            epsDt.Columns.Add("Season", typeof(string));
-            foreach (Episode ep in eps)
-            {
-                epsDt.Rows.Add(ep.Id, ep.Name, ep.Season.Name);
-            }
-            DataTable castDt = new DataTable();
-            castDt.TableName = AHSProvider.casts;
-            castDt.Columns.Add("Id", typeof(int));
-            castDt.Columns.Add("Name", typeof(string));
-            foreach (Cast c in casts)
-            {
-                castDt.Rows.Add(c.Id, c.Name);
-            }
-            DataTable charDt = new DataTable();
-            charDt.TableName = AHSProvider.chars;
-            charDt.Columns.Add("Id", typeof(int));
-            charDt.Columns.Add("Name", typeof(string));
-            charDt.Columns.Add("Cast", typeof(string));
-            charDt.Columns.Add("Season1", typeof(string));
-            charDt.Columns.Add("NumOfEps1", typeof(int));
-            charDt.Columns.Add("Season2", typeof(string));
-            charDt.Columns.Add("NumOfEps2", typeof(int));
-            foreach (Character c in chars)
-            {
-                charDt.Rows.Add(c.Id,
-                    c.Name,
-                    c.Cast.Name,
-                    c.Season1.Name,
-                    c.NumOfEpisodes1,
-                    c.Season2?.Name,
-                    c.NumOfEpisodes2);
-            }
-            DataTable[] dtArray = { seasonsDT, epsDt, castDt, charDt };
-            ds.Tables.AddRange(dtArray);
-            return ds;
         }
-        //filters each table from the dbds(original dataset) to a list of rows that
-        //has a column matching the keyword providing the user with a more focused 
-        //view of the season cast or character the are trying to view
-        public DataSet searchDataSet(string searchstr)
+
+        public Dictionary<string, DataTable> searchDict(string keyword)
         {
-            List<Season> fSeasons = dbds.Tables[0].AsEnumerable().Where(Row => Row.Field<string>("Name").Contains(searchstr))
-            .Select(row => new Season
-            {
-                Id = row.Field<int>("Id"),
-                SeasonNum = row.Field<int>("SeasonNum"),
-                Name = row.Field<string>("Name")
-            }).ToList();
-            List<Episode> fEps = dbds.Tables[1].AsEnumerable().Where(Row => Row.Field<string>("Name").Contains(searchstr) || Row.Field<string>("Season").Contains(searchstr))
-                .Select(row => new Episode
-                {
-                    Id = row.Field<int>("Id"),
-                    Name = row.Field<string>("Name"),
-                    Season = new Season
-                    {
-                        Name = row.Field<string>("Season")
-                    }
-                }).ToList();
-            List<Cast> fCasts = dbds.Tables[2].AsEnumerable().Where(Row => Row.Field<string>("Name").Contains(searchstr))
-                .Select(row => new Cast
-                {
-                    Id = row.Field<int>("Id"),
-                    Name = row.Field<string>("Name")
-                }).ToList();
-            
-            List<Character> fchars = dbds.Tables[3].AsEnumerable().Where(Row => 
-            (Row.Field<string>("Name")?.Contains(searchstr) ?? false) ||
-             (Row.Field<string>("Cast")?.Contains(searchstr) ?? false) ||
-             (Row.Field<string>("Season1")?.Contains(searchstr) ?? false) || 
-             (Row.Field<string>("Season2")?.Contains(searchstr) ?? false))
-                .Select(row => new Character
-                {
-                    Id = row.Field<int>("Id"),
-                    Name = row.Field<string>("Name"),
-                    Cast = new Cast
-                    {
-                        Name = row.Field<string>("Cast")
-                    },
-                    Season1 = new Season
-                    {
-                        Name = row.Field<string>("Season1")
-                    },
-                    NumOfEpisodes1 = row.Field<int>("NumOfEps1"),
-                    Season2 = row["Season2"] == DBNull.Value ? null : 
-                    new Season
-                    {
-                        Name = row.Field<string>("Season2")
-                    },
-                    NumOfEpisodes2 = row["NumOfEps2"] == DBNull.Value
-                    ? 0 : row.Field<int>("NumofEps2")
-
-
-                }).ToList();
-            return CreateDs(fSeasons, fEps, fCasts, fchars);
+            Dictionary<string, DataTable> sDict = new Dictionary<string, DataTable>();
+            List<Season> mSeasons = seasons.Where(s => s.Name.Contains(keyword)).ToList();
+            List<Episode> mEps = eps.Where(e => e.Name.Contains(keyword) || e.Season.Name.Contains(keyword)).ToList();
+            List<Cast> mCasts = casts.Where(c => c.Name.ToString().Contains(keyword)).ToList();
+            List<Character> mChars = chars.Where(c => c.Name.Contains(keyword)
+            || c.Cast.Name.ToString().Contains(keyword)
+            || c.Season1.Name.Contains(keyword)
+            || (c.Season2 == null ? false : c.Season2.Name.Contains(keyword))).ToList();
+            //sDict.Add("Seasons", createDT(mSeasons));
+            //sDict.Add("Episodes", createDT(mEps));
+            //sDict.Add("Casts", createDT(mCasts));
+            //sDict.Add("Characters", createDT(mChars));
+            return sDict;
         }
+        
     }
 }

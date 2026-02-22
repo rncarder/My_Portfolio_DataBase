@@ -30,17 +30,17 @@
         {
             txtcharName = new TextBox();
             cmbCastList = new ComboBox();
-            label1 = new Label();
-            label2 = new Label();
+            lblCharName = new Label();
+            lblCastPicker = new Label();
             cmbSeasonList1 = new ComboBox();
             cmbSeasonList2 = new ComboBox();
-            label3 = new Label();
-            label4 = new Label();
+            lblSeason1 = new Label();
+            lblSeason2 = new Label();
             charAddToBufferBtn = new Button();
             txtEpNum = new TextBox();
-            label5 = new Label();
+            lblNumOfEps1 = new Label();
             txtEp2 = new TextBox();
-            label6 = new Label();
+            lblNumOfEps2 = new Label();
             commitBtn = new Button();
             OpenCastPanel = new Button();
             panel = new Panel();
@@ -50,12 +50,14 @@
             PnlTxtName = new TextBox();
             pnlAddBtn = new Button();
             OpenSeasonPanel = new Button();
+            charDashBoard = new DataGridView();
             panel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)charDashBoard).BeginInit();
             SuspendLayout();
             // 
             // txtcharName
             // 
-            txtcharName.Location = new Point(92, 71);
+            txtcharName.Location = new Point(92, 31);
             txtcharName.Name = "txtcharName";
             txtcharName.Size = new Size(125, 27);
             txtcharName.TabIndex = 0;
@@ -63,33 +65,33 @@
             // cmbCastList
             // 
             cmbCastList.FormattingEnabled = true;
-            cmbCastList.Location = new Point(92, 104);
+            cmbCastList.Location = new Point(92, 64);
             cmbCastList.Name = "cmbCastList";
             cmbCastList.Size = new Size(151, 28);
             cmbCastList.TabIndex = 1;
             // 
-            // label1
+            // lblCharName
             // 
-            label1.AutoSize = true;
-            label1.Location = new Point(37, 71);
-            label1.Name = "label1";
-            label1.Size = new Size(49, 20);
-            label1.TabIndex = 2;
-            label1.Text = "Name";
+            lblCharName.AutoSize = true;
+            lblCharName.Location = new Point(37, 38);
+            lblCharName.Name = "lblCharName";
+            lblCharName.Size = new Size(49, 20);
+            lblCharName.TabIndex = 2;
+            lblCharName.Text = "Name";
             // 
-            // label2
+            // lblCastPicker
             // 
-            label2.AutoSize = true;
-            label2.Location = new Point(37, 107);
-            label2.Name = "label2";
-            label2.Size = new Size(37, 20);
-            label2.TabIndex = 3;
-            label2.Text = "Cast";
+            lblCastPicker.AutoSize = true;
+            lblCastPicker.Location = new Point(37, 72);
+            lblCastPicker.Name = "lblCastPicker";
+            lblCastPicker.Size = new Size(37, 20);
+            lblCastPicker.TabIndex = 3;
+            lblCastPicker.Text = "Cast";
             // 
             // cmbSeasonList1
             // 
             cmbSeasonList1.FormattingEnabled = true;
-            cmbSeasonList1.Location = new Point(92, 138);
+            cmbSeasonList1.Location = new Point(92, 104);
             cmbSeasonList1.Name = "cmbSeasonList1";
             cmbSeasonList1.Size = new Size(151, 28);
             cmbSeasonList1.TabIndex = 2;
@@ -97,32 +99,32 @@
             // cmbSeasonList2
             // 
             cmbSeasonList2.FormattingEnabled = true;
-            cmbSeasonList2.Location = new Point(92, 217);
+            cmbSeasonList2.Location = new Point(92, 171);
             cmbSeasonList2.Name = "cmbSeasonList2";
             cmbSeasonList2.Size = new Size(151, 28);
             cmbSeasonList2.TabIndex = 4;
             // 
-            // label3
+            // lblSeason1
             // 
-            label3.AutoSize = true;
-            label3.Location = new Point(22, 138);
-            label3.Name = "label3";
-            label3.Size = new Size(64, 20);
-            label3.TabIndex = 6;
-            label3.Text = "Season1";
+            lblSeason1.AutoSize = true;
+            lblSeason1.Location = new Point(12, 110);
+            lblSeason1.Name = "lblSeason1";
+            lblSeason1.Size = new Size(64, 20);
+            lblSeason1.TabIndex = 6;
+            lblSeason1.Text = "Season1";
             // 
-            // label4
+            // lblSeason2
             // 
-            label4.AutoSize = true;
-            label4.Location = new Point(22, 220);
-            label4.Name = "label4";
-            label4.Size = new Size(64, 20);
-            label4.TabIndex = 7;
-            label4.Text = "Season2";
+            lblSeason2.AutoSize = true;
+            lblSeason2.Location = new Point(12, 174);
+            lblSeason2.Name = "lblSeason2";
+            lblSeason2.Size = new Size(64, 20);
+            lblSeason2.TabIndex = 7;
+            lblSeason2.Text = "Season2";
             // 
             // charAddToBufferBtn
             // 
-            charAddToBufferBtn.Location = new Point(22, 306);
+            charAddToBufferBtn.Location = new Point(22, 256);
             charAddToBufferBtn.Name = "charAddToBufferBtn";
             charAddToBufferBtn.Size = new Size(136, 29);
             charAddToBufferBtn.TabIndex = 6;
@@ -132,39 +134,39 @@
             // 
             // txtEpNum
             // 
-            txtEpNum.Location = new Point(174, 174);
+            txtEpNum.Location = new Point(164, 138);
             txtEpNum.Name = "txtEpNum";
             txtEpNum.Size = new Size(43, 27);
             txtEpNum.TabIndex = 3;
             // 
-            // label5
+            // lblNumOfEps1
             // 
-            label5.AutoSize = true;
-            label5.Location = new Point(12, 181);
-            label5.Name = "label5";
-            label5.Size = new Size(146, 20);
-            label5.TabIndex = 10;
-            label5.Text = "Number Of Episodes";
+            lblNumOfEps1.AutoSize = true;
+            lblNumOfEps1.Location = new Point(12, 141);
+            lblNumOfEps1.Name = "lblNumOfEps1";
+            lblNumOfEps1.Size = new Size(146, 20);
+            lblNumOfEps1.TabIndex = 10;
+            lblNumOfEps1.Text = "Number Of Episodes";
             // 
             // txtEp2
             // 
-            txtEp2.Location = new Point(174, 253);
+            txtEp2.Location = new Point(174, 208);
             txtEp2.Name = "txtEp2";
             txtEp2.Size = new Size(43, 27);
             txtEp2.TabIndex = 5;
             // 
-            // label6
+            // lblNumOfEps2
             // 
-            label6.AutoSize = true;
-            label6.Location = new Point(22, 263);
-            label6.Name = "label6";
-            label6.Size = new Size(146, 20);
-            label6.TabIndex = 12;
-            label6.Text = "Number Of Episodes";
+            lblNumOfEps2.AutoSize = true;
+            lblNumOfEps2.Location = new Point(12, 211);
+            lblNumOfEps2.Name = "lblNumOfEps2";
+            lblNumOfEps2.Size = new Size(146, 20);
+            lblNumOfEps2.TabIndex = 12;
+            lblNumOfEps2.Text = "Number Of Episodes";
             // 
             // commitBtn
             // 
-            commitBtn.Location = new Point(174, 306);
+            commitBtn.Location = new Point(174, 256);
             commitBtn.Name = "commitBtn";
             commitBtn.Size = new Size(94, 29);
             commitBtn.TabIndex = 13;
@@ -177,7 +179,7 @@
             OpenCastPanel.BackColor = SystemColors.ControlText;
             OpenCastPanel.Font = new Font("Rockwell Extra Bold", 10F, FontStyle.Bold);
             OpenCastPanel.ForeColor = SystemColors.ActiveCaption;
-            OpenCastPanel.Location = new Point(251, 106);
+            OpenCastPanel.Location = new Point(249, 64);
             OpenCastPanel.Name = "OpenCastPanel";
             OpenCastPanel.Size = new Size(36, 29);
             OpenCastPanel.TabIndex = 14;
@@ -200,7 +202,7 @@
             // 
             // pnlTxtSeasonNum
             // 
-            pnlTxtSeasonNum.Location = new Point(131, 91);
+            pnlTxtSeasonNum.Location = new Point(131, 88);
             pnlTxtSeasonNum.Name = "pnlTxtSeasonNum";
             pnlTxtSeasonNum.Size = new Size(125, 27);
             pnlTxtSeasonNum.TabIndex = 7;
@@ -245,7 +247,7 @@
             OpenSeasonPanel.BackColor = SystemColors.ActiveCaptionText;
             OpenSeasonPanel.Font = new Font("Rockwell Extra Bold", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
             OpenSeasonPanel.ForeColor = SystemColors.HotTrack;
-            OpenSeasonPanel.Location = new Point(251, 144);
+            OpenSeasonPanel.Location = new Point(249, 104);
             OpenSeasonPanel.Name = "OpenSeasonPanel";
             OpenSeasonPanel.Size = new Size(36, 29);
             OpenSeasonPanel.TabIndex = 16;
@@ -253,32 +255,44 @@
             OpenSeasonPanel.UseVisualStyleBackColor = false;
             OpenSeasonPanel.Click += OpenSeasonPanel_Click;
             // 
+            // charDashBoard
+            // 
+            charDashBoard.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            charDashBoard.Location = new Point(3, 291);
+            charDashBoard.Name = "charDashBoard";
+            charDashBoard.RowHeadersWidth = 51;
+            charDashBoard.Size = new Size(282, 168);
+            charDashBoard.TabIndex = 17;
+            charDashBoard.CellClick += charDashBoard_CellClick;
+            // 
             // CharacterForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(808, 465);
+            Controls.Add(charDashBoard);
             Controls.Add(OpenSeasonPanel);
             Controls.Add(panel);
             Controls.Add(OpenCastPanel);
             Controls.Add(commitBtn);
-            Controls.Add(label6);
+            Controls.Add(lblNumOfEps2);
             Controls.Add(txtEp2);
-            Controls.Add(label5);
+            Controls.Add(lblNumOfEps1);
             Controls.Add(txtEpNum);
             Controls.Add(charAddToBufferBtn);
-            Controls.Add(label4);
-            Controls.Add(label3);
+            Controls.Add(lblSeason2);
+            Controls.Add(lblSeason1);
             Controls.Add(cmbSeasonList2);
             Controls.Add(cmbSeasonList1);
-            Controls.Add(label2);
-            Controls.Add(label1);
+            Controls.Add(lblCastPicker);
+            Controls.Add(lblCharName);
             Controls.Add(cmbCastList);
             Controls.Add(txtcharName);
             Name = "CharacterForm";
             Text = "CharacterForm";
             panel.ResumeLayout(false);
             panel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)charDashBoard).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -287,17 +301,17 @@
 
         private TextBox txtcharName;
         private ComboBox cmbCastList;
-        private Label label1;
-        private Label label2;
+        private Label lblCharName;
+        private Label lblCastPicker;
         private ComboBox cmbSeasonList1;
         private ComboBox cmbSeasonList2;
-        private Label label3;
-        private Label label4;
+        private Label lblSeason1;
+        private Label lblSeason2;
         private Button charAddToBufferBtn;
         private TextBox txtEpNum;
-        private Label label5;
+        private Label lblNumOfEps1;
         private TextBox txtEp2;
-        private Label label6;
+        private Label lblNumOfEps2;
         private Button commitBtn;
         private Button OpenCastPanel;
         private Panel panel;
@@ -307,5 +321,6 @@
         private TextBox PnlTxtName;
         private Button pnlAddBtn;
         private Button OpenSeasonPanel;
+        private DataGridView charDashBoard;
     }
 }

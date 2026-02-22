@@ -30,8 +30,10 @@
         {
             button1 = new Button();
             txtCastName = new TextBox();
-            label1 = new Label();
+            lblCastName = new Label();
             commitCastBtn = new Button();
+            CastDashBoard = new DataGridView();
+            ((System.ComponentModel.ISupportInitialize)CastDashBoard).BeginInit();
             SuspendLayout();
             // 
             // button1
@@ -50,15 +52,16 @@
             txtCastName.Name = "txtCastName";
             txtCastName.Size = new Size(125, 27);
             txtCastName.TabIndex = 0;
+            txtCastName.KeyPress += UIHelper.Alpha_KeyPress;
             // 
-            // label1
+            // lblCastName
             // 
-            label1.AutoSize = true;
-            label1.Location = new Point(22, 68);
-            label1.Name = "label1";
-            label1.Size = new Size(49, 20);
-            label1.TabIndex = 2;
-            label1.Text = "Name";
+            lblCastName.AutoSize = true;
+            lblCastName.Location = new Point(22, 72);
+            lblCastName.Name = "lblCastName";
+            lblCastName.Size = new Size(49, 20);
+            lblCastName.TabIndex = 2;
+            lblCastName.Text = "Name";
             // 
             // commitCastBtn
             // 
@@ -70,17 +73,29 @@
             commitCastBtn.UseVisualStyleBackColor = true;
             commitCastBtn.Click += commitCastBtn_Click;
             // 
+            // CastDashBoard
+            // 
+            CastDashBoard.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            CastDashBoard.Location = new Point(22, 310);
+            CastDashBoard.Name = "CastDashBoard";
+            CastDashBoard.RowHeadersWidth = 51;
+            CastDashBoard.Size = new Size(300, 128);
+            CastDashBoard.TabIndex = 3;
+            CastDashBoard.CellClick += CastDashBoard_CellClick;
+            // 
             // CastsForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(CastDashBoard);
             Controls.Add(commitCastBtn);
-            Controls.Add(label1);
+            Controls.Add(lblCastName);
             Controls.Add(txtCastName);
             Controls.Add(button1);
             Name = "CastsForm";
             Text = "CastsForm";
+            ((System.ComponentModel.ISupportInitialize)CastDashBoard).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -89,7 +104,8 @@
 
         private Button button1;
         private TextBox txtCastName;
-        private Label label1;
+        private Label lblCastName;
         private Button commitCastBtn;
+        private DataGridView CastDashBoard;
     }
 }

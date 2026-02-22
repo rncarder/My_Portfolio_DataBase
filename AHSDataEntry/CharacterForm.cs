@@ -12,8 +12,10 @@ using AHSDb.Models;
 
 namespace AHSDataEntry
 {
+
     public partial class CharacterForm : Form
     {
+        public Color cntrlClr;
         public bool isCastPanelOpen = false;
         public bool isSeasonPanelOpen = false;
         List<Cast> castList = new List<Cast>();
@@ -21,24 +23,30 @@ namespace AHSDataEntry
         public CharacterForm()
         {
             InitializeComponent();
-
+            fetchData();
+            if (AHSProvider.charBuffer.Count > 0) { UpdateCharDash(); }
+        }
+        public void fetchData()
+        {
             using (AHSDbContext context = new AHSDbContext())
             {
-                ;
+
                 try
                 {
-                    castList = context.Casts.AsNoTracking().ToList();
+                    context.Casts.AsNoTracking().ToList();
                     if (AHSProvider.castBuffer.Count > 0)
                     {
                         castList.AddRange(AHSProvider.castBuffer);
+                       
                     }
                     seasonList = context.Seasons.AsNoTracking().ToList();
                     if (AHSProvider.seasonbuffer.Count > 0)
                     {
                         seasonList.AddRange(AHSProvider.seasonbuffer);
                     }
-                    setCastComboBox();
-                    SetSeasonComboBox();
+                    UIHelper.SetComboBox(cmbCastList, castList);
+                    UIHelper.SetComboBox(cmbSeasonList1, seasonList);
+                    UIHelper.SetComboBox(cmbSeasonList2, seasonList);
                 }
                 catch (Exception ex)
                 {
@@ -49,20 +57,26 @@ namespace AHSDataEntry
 
             }
         }
+        public void UpdateCharDash()
+        {
+            charDashBoard.DataSource = null;
+            charDashBoard.DataSource = AHSProvider.charBuffer;
+            charDashBoard.Columns["Id"].Visible = false;
+        }
         private void CharAddToBuffer_click(object sender, EventArgs e)
         {
 
             object charName = UIHelper.TextBoxCheck(txtcharName.Text.ToString(), false, false);
             if (charName == null)
             {
-                MessageBox.Show("Please enter a Valid name into the Name Box");
+                lblCharName.BackColor = Color.Red;
                 txtcharName.Focus();
                 return;
             }
             object ep1 = UIHelper.TextBoxCheck(txtEpNum.Text, false, true);
             if (ep1 == null)
             {
-                MessageBox.Show("Please Enter a valid number for number of Episodes");
+
                 txtEpNum.Focus();
                 return;
             }
@@ -80,7 +94,7 @@ namespace AHSDataEntry
                 cmbCastList.Focus();
                 return;
             }
-            
+
             if (!AHSProvider.addToBuffer(new Character
             {
                 Name = charName.ToString(),
@@ -95,11 +109,11 @@ namespace AHSDataEntry
             {
                 MessageBox.Show($"{charName.ToString()} is already in buffer)");
                 txtcharName.Focus();
-                UIHelper.UiCleaner(this.Controls);
+                UIHelper.UiCleaner(this.Controls, cntrlClr);
                 return;
             }
 
-            UIHelper.UiCleaner(this.Controls);
+            UIHelper.UiCleaner(this.Controls, cntrlClr);
             txtcharName.Focus();
         }
 
@@ -165,6 +179,7 @@ namespace AHSDataEntry
             pnlLblSeasonNum.Visible = false;
             pnlTxtSeasonNum.Visible = false;
             PnlTxtName.Focus();
+            isSeasonPanelOpen = false;
             isCastPanelOpen = true;
         }
 
@@ -174,6 +189,7 @@ namespace AHSDataEntry
             pnlLblSeasonNum.Visible = true;
             pnlTxtSeasonNum.Visible = true;
             pnlTxtSeasonNum.Focus();
+            isCastPanelOpen = false;
             isSeasonPanelOpen = true;
         }
 
@@ -185,7 +201,7 @@ namespace AHSDataEntry
                 object castName = UIHelper.TextBoxCheck(PnlTxtName.Text.ToString(), false, false);
                 if (castName == null)
                 {
-                    MessageBox.Show("Please enter a Valid name into the Name Box");
+                    pnlLblName.BackColor = Color.Red;
                     PnlTxtName.Focus();
                     return;
                 }
@@ -194,11 +210,11 @@ namespace AHSDataEntry
                 {
                     MessageBox.Show($"{castName.ToString()} is already in buffer");
                     PnlTxtName.Focus();
-                    UIHelper.UiCleaner(panel.Controls);
+                    UIHelper.UiCleaner(panel.Controls, cntrlClr);
                     return;
                 }
                 castList.Add(cast);
-                setCastComboBox();
+                UIHelper.SetComboBox(cmbCastList, castList);
                 isCastPanelOpen = false;
 
             }
@@ -207,14 +223,14 @@ namespace AHSDataEntry
                 object seasonNum = UIHelper.TextBoxCheck(pnlTxtSeasonNum.Text.ToString(), false, true);
                 if (seasonNum == null)
                 {
-                    MessageBox.Show("Please enter a Valid number into the Season Number Box");
+                    pnlLblSeasonNum.BackColor = Color.Red;
                     pnlTxtSeasonNum.Focus();
                     return;
                 }
                 object seasonName = UIHelper.TextBoxCheck(PnlTxtName.Text.ToString(), false, false);
                 if (seasonName == null)
                 {
-                    MessageBox.Show("Please enter a Valid name into the Name Box");
+                    pnlLblName.BackColor = Color.Red;
                     PnlTxtName.Focus();
                     return;
                 }
@@ -223,38 +239,22 @@ namespace AHSDataEntry
                 {
                     MessageBox.Show($"{seasonName.ToString()} is already in buffer");
                     PnlTxtName.Focus();
-                    UIHelper.UiCleaner(panel.Controls);
+                    UIHelper.UiCleaner(panel.Controls, cntrlClr);
                     return;
                 }
                 seasonList.Add(season);
-                SetSeasonComboBox();
+                UIHelper.SetComboBox(cmbSeasonList1, seasonList);
+                UIHelper.SetComboBox(cmbSeasonList2, seasonList);
                 isSeasonPanelOpen = false;
             }
-            UIHelper.UiCleaner(panel.Controls);
+
+            UIHelper.UiCleaner(panel.Controls, cntrlClr);
             panel.Visible = false;
         }
-        public void setCastComboBox()
+
+        private void charDashBoard_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            cmbCastList.DataSource = null;
-            cmbCastList.DataSource = castList;
-            cmbCastList.DisplayMember = "Name";
-            //cmbCastList.ValueMember = "Id";
-            cmbCastList.SelectedIndex = -1;
 
         }
-        public void SetSeasonComboBox()
-        {
-            cmbSeasonList1.DataSource = null;
-            cmbSeasonList1.DataSource = seasonList;
-            cmbSeasonList1.DisplayMember = "Name";
-            cmbSeasonList1.SelectedIndex = -1;
-
-            cmbSeasonList2.DataSource = null;
-            cmbSeasonList2.DataSource = seasonList;
-            cmbSeasonList2.DisplayMember = "Name";
-            cmbSeasonList2.BindingContext = new BindingContext();
-            cmbSeasonList2.SelectedIndex = -1;
-        }
-
     }
 }

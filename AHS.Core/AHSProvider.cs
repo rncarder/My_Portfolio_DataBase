@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -14,10 +15,6 @@ namespace AHS.Core
 {
     public static class AHSProvider
     {
-        public static string seasons = "Seasons";
-        public static String eps = "Episodes";
-        public static string casts = "Casts";
-        public static string chars = "Characters";
         public static List<string> SeasonColumnsList = new List<string>() { "Id", "SeasonNum", "Name" };
         public static List<string> episodesColums = new List<string>() { "Id", "Name", "Season" };
         public static List<string> charcolumns = new List<string>() { "Id", "Name", "Cast", "Season1", "NumOfEpisodes1", "Season2", "NumOfEpisodes2" };
@@ -96,10 +93,26 @@ namespace AHS.Core
         }
         public static string ToUpperCase(string entry)
         {
+            if (entry.Length > 0)
+            {
+                char e = entry[0];
+                char end = entry[entry.Length - 1];
+                if (char.IsWhiteSpace(e))
+                {
+                    string newEntry = entry.Remove(0, 1);
+                    return ToUpperCase(newEntry);
+                }
+                if (char.IsWhiteSpace(end))
+                {
+                    string newEntry = entry.Remove(entry.Length - 1);
+                    return ToUpperCase(newEntry);
+                }
+            }
             TextInfo textInfo = CultureInfo.CurrentCulture.TextInfo;
             return textInfo.ToTitleCase(entry);
             
         }
+        
 
     }
 }
