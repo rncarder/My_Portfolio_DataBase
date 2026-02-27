@@ -13,7 +13,6 @@ namespace AHSDb.Models
                 optionsBuilder.UseSqlServer(@"Data Source=(localdb)\MSSQLLocalDB;Database=AHSDatabase;Integrated Security=True;TrustServerCertificate=True",
                     sqlServerOptionsAction: sqlOptions =>
                     {
-                        // The "Resilience" Plugin
                         sqlOptions.EnableRetryOnFailure(
                             maxRetryCount: 5,
                             maxRetryDelay: TimeSpan.FromSeconds(30),

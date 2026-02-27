@@ -17,7 +17,6 @@ namespace AHSDataEntry
             btns.Add(castBtn);
             btns.Add(CharBtn);
             checkLogin();
-            charUpdateBtn.Visible = false;
         }
         public void checkLogin()
         {
@@ -78,11 +77,5 @@ namespace AHSDataEntry
             characterForm.Show();
         }
 
-        private void charUpdateBtn_click(object sender, EventArgs e)
-        {
-
-            CharacterUpdatForm charUpdateForm = new CharacterUpdatForm();
-            charUpdateForm.Show();
-        }
     }
 }

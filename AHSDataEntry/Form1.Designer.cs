@@ -32,7 +32,6 @@
             epBtn = new Button();
             castBtn = new Button();
             CharBtn = new Button();
-            charUpdateBtn = new Button();
             loginBtn = new Button();
             SuspendLayout();
             // 
@@ -76,17 +75,6 @@
             CharBtn.UseVisualStyleBackColor = true;
             CharBtn.Click += charBtn_click;
             // 
-            // charUpdateBtn
-            // 
-            charUpdateBtn.Location = new Point(229, 153);
-            charUpdateBtn.Name = "charUpdateBtn";
-            charUpdateBtn.Size = new Size(156, 29);
-            charUpdateBtn.TabIndex = 6;
-            charUpdateBtn.Text = "Update A Character";
-            charUpdateBtn.UseVisualStyleBackColor = true;
-            charUpdateBtn.Visible = false;
-            charUpdateBtn.Click += charUpdateBtn_click;
-            // 
             // loginBtn
             // 
             loginBtn.Location = new Point(45, 12);
@@ -103,7 +91,6 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
             Controls.Add(loginBtn);
-            Controls.Add(charUpdateBtn);
             Controls.Add(CharBtn);
             Controls.Add(castBtn);
             Controls.Add(epBtn);
@@ -118,7 +105,6 @@
         private Button epBtn;
         private Button castBtn;
         private Button CharBtn;
-        private Button charUpdateBtn;
         private Button loginBtn;
     }
 }

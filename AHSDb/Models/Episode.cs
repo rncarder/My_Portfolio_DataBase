@@ -1,4 +1,6 @@
-﻿namespace AHSDb.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace AHSDb.Models
 {
     public class Episode : Model
     {

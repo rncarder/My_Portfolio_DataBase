@@ -7,44 +7,24 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AHS.Core.DTOs;
 using AHSDb;
 using AHSDb.Models;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace AHS.Core
 {
-    public static class AHSProvider
+    public class AHSProvider
     {
-        public static List<string> SeasonColumnsList = new List<string>() { "Id", "SeasonNum", "Name" };
-        public static List<string> episodesColums = new List<string>() { "Id", "Name", "Season" };
-        public static List<string> charcolumns = new List<string>() { "Id", "Name", "Cast", "Season1", "NumOfEpisodes1", "Season2", "NumOfEpisodes2" };
-        public static List<string> castColumns = new List<string>() { "Id", "Name" };
+        public AHSDbContext context = new AHSDbContext();
 
         public static List<Season> seasonbuffer = new List<Season>();
         public static List<Episode> episodeBuffer = new List<Episode>();
         public static List<Cast> castBuffer = new List<Cast>();
         public static List<Character> charBuffer = new List<Character>();
 
-        //internal static List<_season> SeasonsToBeAdded { get => seasonsToBeAdded; set => seasonsToBeAdded = value; }
-
-        public static string ConnectionString()
-        {
-            return @"Data Source=(localdb)\MSSQLLocalDB;Database=AHSDatabase;Integrated Security=True;TrustServerCertificate=True";
-        }
-        public static string InsertQueryString(string table, List<string> columns)
-        {
-            string columnsList = string.Join(", ", columns);
-            string placeHolders = string.Join(", @", columns);
-
-            string q = $"INSERT INTO {table} ({columnsList}) VALUES (@{placeHolders})";
-            return q;
-
-        }
-        public static string SelectQueryString(string table, List<string> columns)
-        {
-            string columnlist = string.Join(",", columns);
-            return $"SELECT {columnlist} From {table}";
-        }
         public static bool addToBuffer(Model mod)
         {
 
@@ -91,7 +71,7 @@ namespace AHS.Core
             }
             return false;
         }
-        public static string ToUpperCase(string entry)
+        public string ToUpperCase(string entry)
         {
             if (entry.Length > 0)
             {
@@ -112,7 +92,73 @@ namespace AHS.Core
             return textInfo.ToTitleCase(entry);
             
         }
-        
+        public Dictionary<string, List<object>> MakeDict()
+        {
+            Dictionary<string, List<object>> dict = new Dictionary<string, List<object>>();
+            List<DTOs.SeasonReadDto> seasons = context.Seasons.AsNoTracking().Select(s => new DTOs.SeasonReadDto
+            {
+                Id = s.Id,
+                Name = s.Name,
+                SeasonNum = s.SeasonNum,
+
+            }).ToList();
+            List<DTOs.EpisodeReadDto> eps = context.Episodes.AsNoTracking().
+                Select(e => new DTOs.EpisodeReadDto
+                {
+                    Id = e.Id,
+                    Name = e.Name,
+                    seasonName = e.Season.Name
+                }).ToList();
+            List<DTOs.CastReadDto> casts = context.Casts.AsNoTracking().Select(c => new CastReadDto
+            {
+                Id = c.Id,
+                Name = c.Name
+            }).ToList();
+            List<DTOs.CharacterReadDto> chars = context.Characters.AsNoTracking().Select(c => new CharacterReadDto
+            {
+                Id = c.Id,
+                Name = c.Name,
+                CastMember = c.Cast.Name,
+                Season1Name = c.Season1.Name,
+                numOfEps1 = c.NumOfEpisodes1,
+                Season2Name = c.Season2 == null ? "N/A" : c.Season2.Name,
+                numOfEps2 = c.NumOfEpisodes2 ?? 0
+
+            }).ToList();
+            /*
+
+            Console.WriteLine(dict.Values.ToString);
+            */
+            dict.Add("Seasons", seasons.Cast<object>().ToList());
+            dict.Add("Episodes", eps.Cast<object>().ToList());
+            dict.Add("Casts", casts.Cast<object>().ToList());
+            dict.Add("Characters", chars.Cast<object>().ToList());
+            return dict;
+        }
+        public List<object> searchList(string keyword, List<object> sourcelist)
+        {
+            if (string.IsNullOrEmpty(keyword)) { return sourcelist; }
+            List<object> filteredList = new List<object>();
+            foreach(var item in sourcelist)
+            {
+                var props = item.GetType().GetProperties();
+                bool ismatch = false;
+                foreach(var p in props)
+                {
+                    if(p.PropertyType == typeof(string))
+                    {
+                        string val = p.GetValue(item)?.ToString() ?? "";
+                        if (val.Contains(keyword))
+                        {
+                            ismatch = true;
+                            break;
+                        }
+                    }
+                }
+                if (ismatch) { filteredList.Add(item); }
+            }
+            return filteredList;
+        }
 
     }
 }
