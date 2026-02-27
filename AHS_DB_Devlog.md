@@ -70,4 +70,11 @@ The view was so easy to manageand easier to digest after setting the tables to l
 **Late night refactor**
 refactored the datatables to take out need for conversions in the search method
 
+2/19/26
+it occured to me that i was using my cotext impentation of unit of work to create  pocos then destroy them by adding them to a table then making the linq method of filtering a nightmare. So i gutted the whole form and basically started from scratch i added a dictionary to store strings as keys which is used as a data source for the combobox. i and used the list of pocos for the values in the dictionary. fixed the search to filter using the list of pocos rather than converting data from the datatables. after testing i realized the data was not displaying as I intended so I shifted to using datatables in the dictionary and populated the tables with pocos i then changed the search method type to dictionary<string, datatable> that way in the selected value change method in the combobox I can call either the master dictionary or the search dictionary. the search method is still using the pocos i created from the Db context. i do realize this is way to much overhead on the memory and if the database had much more data then it would probably result in a crash. i will fix that once i get a better architecture. but for right now i had to settle on what is "functional". I do have a plan to vamp up my arechitecture for the whole system im still learning thee ins and outs of using context unit of work.
 
+2/20/26
+took break to spend time with my family and refresh. Read up on how to implmentent the new architecture design.
+
+2/21/26
+I Added dash boards to the entry app so the user can keep track of what in each buffer also created a method for cell clicks so the user can edit or delete items in the buffer. Instead of pop ups to tell the user so information is incorrect or inaccurate the program now changes the label backcolor to red to inform the user to fix the information in that box. Also to keep data intergreity i made methods for the textboxx now if the user can only put digits in the boxes expecting ints and alpha in boxes expecting strings.
