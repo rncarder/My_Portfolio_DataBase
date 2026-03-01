@@ -8,23 +8,37 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AHS.Core.DTOs;
+using AHS.Core.Interfaces;
 using AHSDb;
 using AHSDb.Models;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore;
-
+using AHS.Core.Interfaces;
 
 namespace AHS.Core
 {
-    public class AHSProvider
+    public class AHSProvider 
     {
         public AHSDbContext context = new AHSDbContext();
 
+        private Dictionary<string, List<ISearchable>> masterDict = new Dictionary<string, List<ISearchable>>();
         public static List<Season> seasonbuffer = new List<Season>();
         public static List<Episode> episodeBuffer = new List<Episode>();
         public static List<Cast> castBuffer = new List<Cast>();
         public static List<Character> charBuffer = new List<Character>();
+        public AHSProvider()
+        {
+            masterDict = MakeDict();
+        }
+        public List<ISearchable> Getlist(string key)
+        {
+            return masterDict[key];
+        }
+        public string[] GetKeys()
+        {
+            return masterDict.Keys.ToArray();
 
+        }
         public static bool addToBuffer(Model mod)
         {
 
@@ -92,9 +106,10 @@ namespace AHS.Core
             return textInfo.ToTitleCase(entry);
             
         }
-        public Dictionary<string, List<object>> MakeDict()
+        public Dictionary<string, List<ISearchable>> MakeDict()
         {
-            Dictionary<string, List<object>> dict = new Dictionary<string, List<object>>();
+            Dictionary<string, List<ISearchable>> dict = new Dictionary<string, List<ISearchable>>();
+            masterDict.Clear();
             List<DTOs.SeasonReadDto> seasons = context.Seasons.AsNoTracking().Select(s => new DTOs.SeasonReadDto
             {
                 Id = s.Id,
@@ -125,19 +140,19 @@ namespace AHS.Core
                 numOfEps2 = c.NumOfEpisodes2 ?? 0
 
             }).ToList();
-            /*
 
-            Console.WriteLine(dict.Values.ToString);
-            */
-            dict.Add("Seasons", seasons.Cast<object>().ToList());
-            dict.Add("Episodes", eps.Cast<object>().ToList());
-            dict.Add("Casts", casts.Cast<object>().ToList());
-            dict.Add("Characters", chars.Cast<object>().ToList());
+            dict.Add("Seasons", seasons.Cast<ISearchable>().ToList());
+            dict.Add("Episodes", eps.Cast<ISearchable>().ToList());
+            dict.Add("Casts", casts.Cast<ISearchable>().ToList());
+            dict.Add("Characters", chars.Cast<ISearchable>().ToList());
             return dict;
         }
-        public List<object> searchList(string keyword, List<object> sourcelist)
+        public IEnumerable<T> searchList<T>(string keyword, IEnumerable<T> sourcelist) where T : ISearchable
         {
             if (string.IsNullOrEmpty(keyword)) { return sourcelist; }
+
+            return sourcelist.Where(s => s.SearchString.Contains(keyword));
+            /*
             List<object> filteredList = new List<object>();
             foreach(var item in sourcelist)
             {
@@ -158,6 +173,7 @@ namespace AHS.Core
                 if (ismatch) { filteredList.Add(item); }
             }
             return filteredList;
+            */
         }
 
     }

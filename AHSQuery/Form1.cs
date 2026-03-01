@@ -1,47 +1,34 @@
-using Microsoft.Data.SqlClient;
-using Microsoft.IdentityModel.Tokens;
 using System.Data;
-using System.Xml;
 using AHS.Core;
-using AHS.Core.DTOs;
-using AHSDb.Models;
-using AHSDb;
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System.Reflection;
-using System.Linq.Expressions;
+using AHS.Core.Interfaces;
 
 namespace AHSQuery
 {
     public partial class Form1 : Form
     {
-        AHSProvider provider = new AHSProvider();
-        public Dictionary<string, List<object>> masterDict = new Dictionary<string, List<object>>();
+        AHSProvider provider;
         public Form1()
         {
             InitializeComponent();
-            masterDict = provider.MakeDict();
-            CmbTables.Items.AddRange(masterDict.Keys.ToArray());
-
+            provider = new AHSProvider();
+            CmbTables.Items.AddRange(provider.GetKeys());
 
         }
         private void Cmb_Select_Commit(object sender, EventArgs e)
         {
-            string selected = CmbTables.SelectedItem.ToString();
-            List<object> source = provider.searchList(searchBox.Text.ToString(), masterDict[selected]);
-            dgv.DataSource = source;
-            if (source.Count > 0)
+            if (CmbTables.SelectedItem != null)
             {
-                dgv.Columns["Id"].Visible = false;
-                dgv.Columns["Name"].DisplayIndex = 0;
+                string selected = CmbTables.SelectedItem.ToString();
+                List<ISearchable> sourcelist = provider.Getlist(selected);
+                List<dynamic> searchedList = provider.searchList(searchBox.Text.ToString(), sourcelist).Cast<dynamic>().ToList();
+                dgv.DataSource = searchedList;
             }
+            
         }
         private void refreshBtn_Click(object sender, EventArgs e)
         {
-            //this.Invalidate();
             this.Update();
-            masterDict.Clear();
+            provider = new AHSProvider();
         }
 
 
