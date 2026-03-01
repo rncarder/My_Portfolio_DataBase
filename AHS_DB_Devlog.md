@@ -78,3 +78,9 @@ took break to spend time with my family and refresh. Read up on how to implmente
 
 2/21/26
 I Added dash boards to the entry app so the user can keep track of what in each buffer also created a method for cell clicks so the user can edit or delete items in the buffer. Instead of pop ups to tell the user so information is incorrect or inaccurate the program now changes the label backcolor to red to inform the user to fix the information in that box. Also to keep data intergreity i made methods for the textboxx now if the user can only put digits in the boxes expecting ints and alpha in boxes expecting strings.
+
+2/22/26 - 2/26/26
+took time to study up on sepration of concerns. Realized i was completely wrong for put unit of work inside the ui layer.
+
+2/27/26
+ok ive researched enough to feel alot more confident in my architectural pattern is going to be alot better. today I cleaned up the query app. took all connections to the server out and set them in a nice little method inside the dll. also made dtos to get rid of the need for datatables as now i can load the data from the database exactly as i need it to be so no more tearing down pocos to shove in a datatable.. made a universal filter so using reflections was a piece i found when researching soc this was if a new table or new properties get added to the database that is one less method that will have to be touched. my next update will be getting rid of all the connections in the forms of the dataentry app and adding entry dtos and making it a true unit of work pattern.
